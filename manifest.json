@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "version": "0.0.1",
+  "name": "Soundmark",
+  "description": "Soundmark - Create Soundcloud Timestamps",
+  "permissions": ["tabs", "scripting", "storage"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "assets/hello_extensions.png"
+  },
+  "content_scripts": [
+    {
+      "js": ["content.js"],
+      "matches": ["https://*.soundcloud.com/*"]
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  }
+}
