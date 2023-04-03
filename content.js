@@ -5,13 +5,14 @@ window.addEventListener("load", () => {
 			if (request.message === "getSoundMark") {
 				const [trackInfo] = document.getElementsByClassName("playbackSoundBadge__titleLink")
 				const [timeStamp] = document.getElementsByClassName("playbackTimeline__timePassed")
-
+				const createdAt = Date.now()
 				sendResponse({
 					message: {
+						id: createdAt,
 						trackTitle: trackInfo.title,
 						trackLink: trackInfo.href,
 						timeStamp: timeStamp.lastChild.innerHTML,
-						createdAt: Date.now()
+						createdAt: createdAt,
 					},
 					to: "popup.js"
 

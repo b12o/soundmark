@@ -1,3 +1,14 @@
+// if no sorting criteria exists, det default to 'newest'
+const sorting = chrome.storage.local.get(["sortBy"]).then(async (res) => {
+	if (!res.sortBy) await chrome.storage.local.set({ sortBy: "newest" })
+})
+
+// if no theme preference exists, set default to 'light'
+const theme = chrome.storage.local.get(["theme"]).then(async (res) => {
+	if (!res.theme) await chrome.storage.local.set({ theme: "light" })
+})
+
+
 chrome.storage.onChanged.addListener(() => {
 	chrome.storage.local.get(["soundmarks"]).then(async () => {
 		await chrome.runtime.sendMessage({
@@ -37,7 +48,7 @@ chrome.runtime.onMessage.addListener(async (request) => {
 
 		if (soundcloudTab) {
 			const tabWindow = soundcloudTab.windowId
-			await chrome.windows.update(tabWindow, {focused: true})
+			await chrome.windows.update(tabWindow, { focused: true })
 
 			const soundcloudTabId = soundcloudTab.id
 			if (soundcloudTab.url.includes(trackLink)) {
@@ -54,5 +65,18 @@ chrome.runtime.onMessage.addListener(async (request) => {
 			console.log("did not find soundcloud tab.")
 			soundcloudTab = await chrome.tabs.create({ url: `${trackLink}#t=${timeStamp}` })
 		}
+	}
+
+	if (request.message === "deleteSoundmark") {
+		chrome.storage.local.get(["soundmarks"]).then(res => {
+			let soundmarks = res.soundmarks
+			soundmarks = soundmarks.filter(x => x.id !== request.id)
+			chrome.storage.local.set({ soundmarks }).then(async () => {
+				await chrome.runtime.sendMessage({
+					message: "refreshSoundmarks",
+					to: "popup.js"
+				})
+			})
+		})
 	}
 })

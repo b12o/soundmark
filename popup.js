@@ -1,10 +1,11 @@
 // save soundmark
 const storeSoundmark = async (response) => {
-	const { trackTitle, trackLink, timeStamp, createdAt } = response.message
+	const { id, trackTitle, trackLink, timeStamp, createdAt } = response.message
 
 	chrome.storage.local.get(["soundmarks"]).then((res) => {
 		const soundmarks = res.soundmarks || []
 		soundmarks.push({
+			id,
 			trackTitle,
 			trackLink,
 			timeStamp,
@@ -19,25 +20,52 @@ const playSoundmark = async (trackLink, timeStamp) => {
 	chrome.runtime.sendMessage({
 		message: "playSoundmark",
 		trackLink,
-		timeStamp
+		timeStamp,
+		to: "background.js"
+	})
+}
+
+const deleteSoundmark = async (id) => {
+	chrome.runtime.sendMessage({
+		message: "deleteSoundmark",
+		id,
+		to: "background.js"
 	})
 }
 
 const displaySoundmarks = async () => {
+
+	const sortBy = 
 	chrome.storage.local.get(["soundmarks"]).then(res => {
-		const soundmarks = res.soundmarks || []
+
+		let soundmarks = res.soundmarks || [] //TODO : sort based on criteria specidied by user
 		const soundmarkListItems = []
+
+
+
 		for (const soundmark of soundmarks) {
 			const soundmarkListItem = document.createElement("li")
+			soundmarkListItem.classList.add("soundmarkListItem")
 			soundmarkListItem.style.marginTop = "1rem"
 			soundmarkListItem.style.listStyleType = "none"
-			const soundmarkLink = document.createElement("a")
-			soundmarkLink.innerText = `${soundmark.trackTitle} @ ${soundmark.timeStamp}`
-			soundmarkLink.style.cursor = "pointer"
-			soundmarkLink.addEventListener("click", () => {
+
+			const soundmarkLinkDiv = document.createElement("div")
+			soundmarkLinkDiv.innerText = `${soundmark.trackTitle} @ ${soundmark.timeStamp}`
+			soundmarkLinkDiv.style.cursor = "pointer"
+			soundmarkLinkDiv.style.display = "inline"
+			soundmarkLinkDiv.addEventListener("click", () => {
 				playSoundmark(soundmark.trackLink, soundmark.timeStamp)
 			})
-			soundmarkListItem.appendChild(soundmarkLink)
+
+			const buttonDeleteSoundmark = document.createElement("button")
+			buttonDeleteSoundmark.innerText = "D"
+			buttonDeleteSoundmark.addEventListener("click", () => {
+				deleteSoundmark(soundmark.id)
+			})
+
+			soundmarkListItem.appendChild(soundmarkLinkDiv)
+			soundmarkListItem.appendChild(buttonDeleteSoundmark)
+
 			soundmarkListItems.push(soundmarkListItem)
 		}
 		document.getElementById("soundmarks-list").replaceChildren(...soundmarkListItems)
@@ -54,28 +82,30 @@ chrome.tabs.query({ url: "https://*.soundcloud.com/*", audible: true, })
 
 document.getElementById("show_settings").addEventListener("click", () => {
 	document.getElementsByClassName("settings")[0].style.display = "block"
-	document.getElementsByClassName("soundmarks")[0].style.display = "none"
+	document.getElementsByClassName("main")[0].style.display = "none"
 })
 
 document.getElementById("close_settings").addEventListener("click", () => {
-	document.getElementsByClassName("soundmarks")[0].style.display = "block"
+	document.getElementsByClassName("main")[0].style.display = "block"
 	document.getElementsByClassName("settings")[0].style.display = "none"
 })
 
 document.getElementById("add_soundmark").addEventListener("click", async () => {
 
 	// receive soundmark info from soundcloud.com content script
-	const [activeTab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true })
+	const [soundcloudTab] = await chrome.tabs.query({ url: "https://*.soundcloud.com/*", audible: true, })
 	const response = await chrome.tabs.sendMessage(
-		activeTab.id,
+		soundcloudTab.id,
 		{ message: "getSoundMark", to: "content.js" }
 	)
 	await storeSoundmark(response)
 })
 
 document.getElementById("clear_soundmarks").addEventListener("click", async () => {
-	await chrome.storage.local.clear()
-	displaySoundmarks()
+	if (confirm("Are you sure you want to delete your saved soundmarks?")) {
+		await chrome.storage.local.clear()
+		displaySoundmarks()
+	}
 })
 
 

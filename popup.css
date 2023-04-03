@@ -1,11 +1,27 @@
-body,
 html {
   width: 20rem;
   height: 30rem;
 }
 
-.main-container {
+html {
+  border: 2px solid green;
+}
+
+body {
+  border: 2px solid purple;
+}
+
+#app {
   overflow-y: scroll;
+  border: 1px solid orange;
+}
+
+.main {
+  border: 1px solid blue;
+}
+
+.soundmarkListItem {
+  border: 2px solid red;
 }
 
 .settings {

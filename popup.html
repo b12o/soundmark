@@ -1,22 +1,24 @@
 <html>
   <head>
-    <script src="popup.js" defer></script>
+    <script src="./popup.js" defer></script>
     <link rel="stylesheet" href="popup.css" />
   </head>
   <body>
-    <div class="main-container">
-      <div class="soundmarks">
+    <div id="app">
+      <div class="main">
         <button id="add_soundmark">Add soundmark</button>
         <button id="show_settings">Settings</button>
         <hr />
         <ul id="soundmarks-list"></ul>
       </div>
       <div class="settings">
-        <h2>This is the settings page!</h2>
+        <h4>This is the settings page.</h4>
         <button id="close_settings">close</button>
         <button id="clear_soundmarks">Clear soundmarks</button>
-        <button id="import_soundmarks">Import</button>
-        <button id="export_soundmarks">Export</button>
+        <div class="import-export">
+          <button id="export-soundmarks">Save to file</button>
+          <button id="import-soundmarks">Load from file</button>
+        </div>
       </div>
     </div>
   </body>
