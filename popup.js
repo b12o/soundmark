@@ -1,7 +1,14 @@
-// save soundmark
+import { STYLES } from "./injectedStyle.js"
+
+const SOUNDCLOUD_IS_PLAYING = (await chrome.tabs.query({
+	url: "https://*.soundcloud.com/*",
+	audible: true
+})).length > 0
+
+let STYLESHEET = undefined
+
 const storeSoundmark = async (response) => {
 	const { id, trackTitle, trackLink, timeStamp, createdAt } = response.message
-
 	chrome.storage.local.get(["soundmarks"]).then((res) => {
 		const soundmarks = res.soundmarks || []
 		soundmarks.push({
@@ -13,7 +20,6 @@ const storeSoundmark = async (response) => {
 		})
 		chrome.storage.local.set({ soundmarks })
 	})
-
 }
 
 const playSoundmark = async (trackLink, timeStamp) => {
@@ -21,7 +27,7 @@ const playSoundmark = async (trackLink, timeStamp) => {
 		message: "playSoundmark",
 		trackLink,
 		timeStamp,
-		to: "background.js"
+		target: "background.js"
 	})
 }
 
@@ -29,89 +35,141 @@ const deleteSoundmark = async (id) => {
 	chrome.runtime.sendMessage({
 		message: "deleteSoundmark",
 		id,
-		to: "background.js"
+		target: "background.js"
 	})
 }
 
-const displaySoundmarks = async () => {
+const truncateTitle = (trackTitle, limit) => {
+	if (trackTitle.length > limit) {
+		return trackTitle.substr(0, limit - 2) + "..."
+	}
+	else return trackTitle
+}
 
-	const sortBy = 
-	chrome.storage.local.get(["soundmarks"]).then(res => {
+const calculateMarqueeSpeed = (speed) => {
+	// time = distance / speed
+	let [marqueeSelector] = document.getElementsByClassName("songtrack-marquee")
+	let marqueeSelectorLength = marqueeSelector.offsetWidth;
+	let timeTaken = marqueeSelectorLength / speed;
+	marqueeSelector.style.animationDuration = timeTaken + "s"
+}
 
-		let soundmarks = res.soundmarks || [] //TODO : sort based on criteria specidied by user
+calculateMarqueeSpeed(40)
+
+const displaySoundmarkList = async () => {
+	chrome.storage.local.get(["soundmarks"]).then(async res => {
+
+		if (res.soundmarks.length > 11) {
+			// check if injected stylesheet already exists in the DOM
+			if (!document.getElementById("STYLESHEET")) {
+				STYLESHEET = document.createElement("style")
+				STYLESHEET.id = "STYLESHEET"
+				STYLESHEET.innerText = STYLES
+				document.head.appendChild(STYLESHEET)
+			}
+		} else {
+			if (document.getElementById("STYLESHEET")) {
+				document.head.removeChild(STYLESHEET)
+			}
+		}
+
+		let soundmarks = res.soundmarks.sort((a, b) => b.createdAt - a.createdAt) ?? [] //TODO : sort based on criteria specidied by user
 		const soundmarkListItems = []
-
-
 
 		for (const soundmark of soundmarks) {
 			const soundmarkListItem = document.createElement("li")
+			soundmarkListItem.style.cursor = "pointer"
 			soundmarkListItem.classList.add("soundmarkListItem")
-			soundmarkListItem.style.marginTop = "1rem"
-			soundmarkListItem.style.listStyleType = "none"
 
-			const soundmarkLinkDiv = document.createElement("div")
-			soundmarkLinkDiv.innerText = `${soundmark.trackTitle} @ ${soundmark.timeStamp}`
-			soundmarkLinkDiv.style.cursor = "pointer"
-			soundmarkLinkDiv.style.display = "inline"
-			soundmarkLinkDiv.addEventListener("click", () => {
+			const soundmarkTrackTitle = document.createElement("div")
+			soundmarkTrackTitle.classList.add("soundmarkListItemText")
+			soundmarkTrackTitle.innerHTML = `${truncateTitle(soundmark.trackTitle, 60)}`
+			soundmarkTrackTitle.style.display = "inline"
+			soundmarkTrackTitle.addEventListener("click", () => {
 				playSoundmark(soundmark.trackLink, soundmark.timeStamp)
 			})
 
+			const soundmarkTrackTimestamp = document.createElement("div")
+			soundmarkTrackTimestamp.classList.add("soundmarkTrackTimestamp")
+			soundmarkTrackTimestamp.innerHTML = `@ ${soundmark.timeStamp}`
+			soundmarkTrackTimestamp.style.display = "inline"
+
 			const buttonDeleteSoundmark = document.createElement("button")
-			buttonDeleteSoundmark.innerText = "D"
+			buttonDeleteSoundmark.classList.add("btn-delete-soundmark")
+			const deleteIcon = document.createElement("img")
+			deleteIcon.src = "assets/delete-icon.svg"
+			deleteIcon.height = "14"
+			deleteIcon.width = "14"
+			deleteIcon.style.background = "transparent"
+			buttonDeleteSoundmark.appendChild(deleteIcon)
 			buttonDeleteSoundmark.addEventListener("click", () => {
 				deleteSoundmark(soundmark.id)
 			})
+			buttonDeleteSoundmark.style.display = "none"
+			soundmarkListItem.addEventListener("mouseenter", () => {
+				soundmarkTrackTitle.innerHTML = `${truncateTitle(soundmark.trackTitle, 45)}`
+				buttonDeleteSoundmark.style.display = "inline"
+			})
+			soundmarkListItem.addEventListener("mouseleave", () => {
+				soundmarkTrackTitle.innerHTML = `${truncateTitle(soundmark.trackTitle, 60)}`
+				buttonDeleteSoundmark.style.display = "none"
+			})
 
-			soundmarkListItem.appendChild(soundmarkLinkDiv)
+			soundmarkListItem.appendChild(soundmarkTrackTitle)
+			soundmarkListItem.appendChild(soundmarkTrackTimestamp)
 			soundmarkListItem.appendChild(buttonDeleteSoundmark)
-
 			soundmarkListItems.push(soundmarkListItem)
 		}
-		document.getElementById("soundmarks-list").replaceChildren(...soundmarkListItems)
+		document.getElementById("soundmarks_list").replaceChildren(...soundmarkListItems)
 	})
 }
 
 // "Add soundmark" button should only be visibe if a track is currently playing
-chrome.tabs.query({ url: "https://*.soundcloud.com/*", audible: true, })
-	.then(soundcloudTab => {
-		const addSoundmark = document.getElementById("add_soundmark")
-		if (soundcloudTab.length) addSoundmark.style.display = "inline-block"
-		else addSoundmark.style.display = "none"
-	})
+const [soundcloudTab] = await chrome.tabs.query({ url: "https://*.soundcloud.com/*", audible: true })
+const [addSoundmarkDiv] = document.getElementsByClassName("add-soundmark")
+const [soundcloudNotPlayingDiv] = document.getElementsByClassName("soundcloud-not-playing")
+if (soundcloudTab) {
+	addSoundmarkDiv.style.display = "flex"
+	soundcloudNotPlayingDiv.style.display = "none"
+}
+else {
+	addSoundmarkDiv.style.display = "none"
+	soundcloudNotPlayingDiv.style.display = "block"
+}
 
-document.getElementById("show_settings").addEventListener("click", () => {
-	document.getElementsByClassName("settings")[0].style.display = "block"
-	document.getElementsByClassName("main")[0].style.display = "none"
+// --- Listeners ---
+
+chrome.runtime.onMessage.addListener((request) => {
+	if (request.message === "refreshSoundmarks") displaySoundmarkList()
 })
 
-document.getElementById("close_settings").addEventListener("click", () => {
-	document.getElementsByClassName("main")[0].style.display = "block"
-	document.getElementsByClassName("settings")[0].style.display = "none"
-})
-
-document.getElementById("add_soundmark").addEventListener("click", async () => {
-
+document.getElementById("btn_add_soundmark").addEventListener("click", async () => {
 	// receive soundmark info from soundcloud.com content script
-	const [soundcloudTab] = await chrome.tabs.query({ url: "https://*.soundcloud.com/*", audible: true, })
+	const trackInfo = await getTrackInfo()
+	const now = Date.now()
+	trackInfo.message.id = now
+	trackInfo.message.createdAt = now
+	await storeSoundmark(trackInfo)
+})
+
+const getTrackInfo = async () => {
+	const [soundcloudTab] = await chrome.tabs.query({
+		url: "https://*.soundcloud.com/*",
+		audible: true,
+	})
 	const response = await chrome.tabs.sendMessage(
 		soundcloudTab.id,
-		{ message: "getSoundMark", to: "content.js" }
+		{
+			message: "getTrackInfo",
+			target: "content.js"
+		}
 	)
-	await storeSoundmark(response)
-})
+	return response
+}
 
-document.getElementById("clear_soundmarks").addEventListener("click", async () => {
-	if (confirm("Are you sure you want to delete your saved soundmarks?")) {
-		await chrome.storage.local.clear()
-		displaySoundmarks()
-	}
-})
+if (SOUNDCLOUD_IS_PLAYING) {
+	const res = await getTrackInfo()
+	document.getElementsByClassName("songtrack-marquee")[0].innerText = res.message.trackTitle
+}
 
-
-// render soundmarks
-chrome.runtime.onMessage.addListener((request) => {
-	if (request.message === "refreshSoundmarks") displaySoundmarks()
-})
-
-displaySoundmarks()
+displaySoundmarkList()

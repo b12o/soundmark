@@ -1,25 +1,26 @@
 <html>
   <head>
-    <script src="./popup.js" defer></script>
+    <script src="./popup.js" type="module" defer></script>
     <link rel="stylesheet" href="popup.css" />
   </head>
   <body>
-    <div id="app">
-      <div class="main">
-        <button id="add_soundmark">Add soundmark</button>
-        <button id="show_settings">Settings</button>
-        <hr />
-        <ul id="soundmarks-list"></ul>
-      </div>
-      <div class="settings">
-        <h4>This is the settings page.</h4>
-        <button id="close_settings">close</button>
-        <button id="clear_soundmarks">Clear soundmarks</button>
-        <div class="import-export">
-          <button id="export-soundmarks">Save to file</button>
-          <button id="import-soundmarks">Load from file</button>
+    <div class="add-soundmark">
+      <div class="now-playing">
+        <p class="now-playing-text">Now playing:</p>
+        <div class="marquee">
+          <span class="songtrack-marquee">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur
+            possimus incidunt cupiditate repellat optio dolor?
+          </span>
         </div>
       </div>
+      <button id="btn_add_soundmark">
+        <p>Add soundmark</p>
+      </button>
     </div>
+    <div class="soundcloud-not-playing">
+      No soundcloud playing right now. Go to soundcloud ->
+    </div>
+    <ul id="soundmarks_list"></ul>
   </body>
 </html>

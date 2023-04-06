@@ -13,7 +13,7 @@ chrome.storage.onChanged.addListener(() => {
 	chrome.storage.local.get(["soundmarks"]).then(async () => {
 		await chrome.runtime.sendMessage({
 			message: "refreshSoundmarks",
-			to: "popup.js"
+			target: "popup.js"
 		})
 	})
 })
@@ -33,7 +33,6 @@ chrome.runtime.onMessage.addListener(async (request) => {
 		if (!soundcloudTab) {
 			[soundcloudTab] = await chrome.tabs.query({
 				url: "https://*.soundcloud.com/*",
-				active: true,
 				lastFocusedWindow: true
 			})
 		}
@@ -42,7 +41,6 @@ chrome.runtime.onMessage.addListener(async (request) => {
 		if (!soundcloudTab) {
 			[soundcloudTab] = await chrome.tabs.query({
 				url: "https://*.soundcloud.com/*",
-				active: true
 			})
 		}
 
@@ -53,7 +51,10 @@ chrome.runtime.onMessage.addListener(async (request) => {
 			const soundcloudTabId = soundcloudTab.id
 			if (soundcloudTab.url.includes(trackLink)) {
 				// can not reload a tab if the url is identical, so recreate tab.
-				await chrome.tabs.create({ url: `${trackLink}#t=${timeStamp}` })
+				await chrome.tabs.create({
+					url: `${trackLink}#t=${timeStamp}`,
+					windowId: tabWindow
+				})
 				await chrome.tabs.remove(soundcloudTabId)
 			}
 			else {
@@ -74,7 +75,7 @@ chrome.runtime.onMessage.addListener(async (request) => {
 			chrome.storage.local.set({ soundmarks }).then(async () => {
 				await chrome.runtime.sendMessage({
 					message: "refreshSoundmarks",
-					to: "popup.js"
+					target: "popup.js"
 				})
 			})
 		})

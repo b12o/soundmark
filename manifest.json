@@ -4,6 +4,7 @@
   "name": "Soundmark",
   "description": "Soundmark - Create Soundcloud Timestamps",
   "permissions": ["tabs", "scripting", "storage"],
+  "options_page": "options.html",
   "action": {
     "default_popup": "popup.html",
     "default_icon": "assets/hello_extensions.png"
