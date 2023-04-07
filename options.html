@@ -1,9 +1,39 @@
-<div class="settings">
-  <h4>This is the options page.</h4>
-  <a href="./popup.html">Close</a>
-  <button id="clear_soundmarks">Clear soundmarks</button>
-  <div class="import-export">
-    <button id="export-soundmarks">Save to file</button>
-    <button id="import-soundmarks">Load from file</button>
-  </div>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="./options.js" type="module" defer></script>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <div class="settings">
+      <div class="sort-by-container">
+        <label class="sort-by-label" for="sort_by">Sort soundmarks by</label>
+        <select class="sort-select" name="sort_by" id="sort_by">
+          <option class="select-option" value="newest">newest</option>
+          <option class="select-option" value="oldest">oldest</option>
+          <option class="select-option" value="trackTitle">track title</option>
+        </select>
+        <div class="collapse-timestamps">
+          <label for="collapse_timestamps"
+            >Collapse soundmarks of the same track?</label
+          >
+          <input
+            type="checkbox"
+            name="collapse_timestamps"
+            id="collapse_timestamps"
+          />
+        </div>
+      </div>
+      <button class="btn-option btn-clear-soundmarks">Clear soundmarks</button>
+      <div class="import-export">
+        <button class="btn-option btn-import" id="import-soundmarks">
+          Load from file
+        </button>
+        <button class="btn-option btn-export" id="export-soundmarks">
+          Save to file
+        </button>
+      </div>
+      <button class="btn-option btn-save-options">Save settings</button>
+    </div>
+  </body>
+</html>

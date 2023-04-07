@@ -1,0 +1,98 @@
+* {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+}
+
+html,
+body {
+  width: 28rem;
+  height: 17rem;
+}
+
+body {
+  background-color: #333;
+  color: white;
+}
+
+.settings {
+  width: 22rem;
+  margin: 2rem auto;
+}
+
+.sort-by-label {
+  font-size: 16px;
+}
+.sort-select {
+  margin-left: 0.5rem;
+  background: transparent;
+  color: white;
+}
+.select-option {
+  background-color: #333;
+}
+
+.collapse-timestamps {
+  margin-top: 0.5rem;
+}
+.collapse-timestamps label {
+  font-size: 14px;
+}
+.collapse-timestamps input {
+  width: 1rem;
+  height: 1rem;
+  position: relative;
+  top: 2px;
+  left: 6px;
+}
+
+.btn-option {
+  background-color: #999;
+  padding: 0.5rem 1rem;
+  min-width: 10rem;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.btn-option:hover {
+  background-color: #555;
+  color: white;
+}
+
+.btn-clear-soundmarks {
+  border: 2px solid #d0342c;
+  color: #d0342c;
+  background: transparent;
+  margin-top: 2rem;
+}
+.btn-clear-soundmarks:hover {
+  color: white;
+  background-color: #d0342c;
+}
+
+.import-export button {
+  display: block;
+}
+
+.import-export {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+
+.btn-export {
+  margin-left: 1rem;
+}
+
+.btn-save-options {
+  display: block;
+  margin: 2rem auto 0;
+}
+.btn-save-options:hover {
+  color: white;
+  background-color: #555;
+}
