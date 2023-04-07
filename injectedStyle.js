@@ -7,7 +7,7 @@ export const STYLES = `
 	overflow-y: scroll;
 }
 .soundmarkListItem {
-	width: calc(28rem - 14px) !important;
+	width: calc(28rem - 8px) !important;
 }
 /* firefox scrollbar*/
 * {

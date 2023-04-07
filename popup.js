@@ -59,7 +59,7 @@ calculateMarqueeSpeed(10)
 const displaySoundmarkList = async () => {
 	chrome.storage.local.get(["soundmarks"]).then(async res => {
 
-		if (res.soundmarks.length > 11) {
+		if (res.soundmarks.length > 12) {
 			// check if injected stylesheet already exists in the DOM
 			if (!document.getElementById("STYLESHEET")) {
 				STYLESHEET = document.createElement("style")
