@@ -80,22 +80,19 @@ const displaySoundmarkList = async () => {
 			const soundmarkListItem = document.createElement("li")
 			soundmarkListItem.style.cursor = "pointer"
 			soundmarkListItem.classList.add("soundmarkListItem")
+			soundmarkListItem.addEventListener("click", () => {
+				playSoundmark(soundmark.trackLink, soundmark.timeStamp)
+			})
 
 			const soundmarkTrackTitle = document.createElement("div")
 			soundmarkTrackTitle.classList.add("soundmarkListItemText")
 			soundmarkTrackTitle.innerHTML = `${truncateTitle(soundmark.trackTitle, 60)}`
 			soundmarkTrackTitle.style.display = "inline"
-			soundmarkTrackTitle.addEventListener("click", () => {
-				playSoundmark(soundmark.trackLink, soundmark.timeStamp)
-			})
 
 			const soundmarkTrackTimestamp = document.createElement("div")
 			soundmarkTrackTimestamp.classList.add("soundmarkTrackTimestamp")
 			soundmarkTrackTimestamp.innerHTML = `@ ${soundmark.timeStamp}`
 			soundmarkTrackTimestamp.style.display = "inline"
-			soundmarkTrackTimestamp.addEventListener("click", () => {
-				playSoundmark(soundmark.trackLink, soundmark.timeStamp)
-			})
 
 			const buttonDeleteSoundmark = document.createElement("button")
 			buttonDeleteSoundmark.classList.add("btn-delete-soundmark")
@@ -105,7 +102,8 @@ const displaySoundmarkList = async () => {
 			deleteIcon.width = "14"
 			deleteIcon.style.background = "transparent"
 			buttonDeleteSoundmark.appendChild(deleteIcon)
-			buttonDeleteSoundmark.addEventListener("click", () => {
+			buttonDeleteSoundmark.addEventListener("click", e => {
+				e.stopPropagation()
 				deleteSoundmark(soundmark.id)
 			})
 			buttonDeleteSoundmark.style.display = "none"
