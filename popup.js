@@ -23,12 +23,13 @@ const storeSoundmark = async (response) => {
 }
 
 const playSoundmark = async (trackLink, timeStamp) => {
-	chrome.runtime.sendMessage({
+	await chrome.runtime.sendMessage({
 		message: "playSoundmark",
 		trackLink,
 		timeStamp,
 		target: "background.js"
 	})
+	window.close()
 }
 
 const deleteSoundmark = async (id) => {
