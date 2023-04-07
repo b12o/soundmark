@@ -11,43 +11,59 @@ li {
 
 html {
   width: 28rem;
-  max-height: 35rem;
+  max-height: 36rem;
+  border: 3px solid #ff5500;
 }
 
 body {
   margin: 0 auto;
-  width: 28rem;
-  max-height: 35rem;
-  background-color: #1c1c1c;
+  width: calc(28rem - 2px);
+  max-height: calc(36rem - 4px);
+  background-color: red;
 }
 
-.add-soundmark {
-  margin: 0 auto;
+.play-status {
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-around;
   align-items: center;
   height: 5rem;
-  width: 28rem;
+  width: calc(28rem - 5px);
   background-color: #333;
+  color: white;
 }
 
 .now-playing {
   margin-top: 0.5rem;
-  width: 17rem;
+  width: 16rem;
   height: 3rem;
   position: relative;
+  z-index: 2000;
 }
 
 .now-playing-text {
   font-style: italic;
   font-size: 12px;
   margin-bottom: 0.2rem;
+  margin-left: 0.5rem;
   color: white;
+  z-index: 2000;
+}
+
+.marquee:before {
+  content: "";
+  width: 100%;
+  height: 1.3rem;
+  position: absolute;
+  left: 0;
+  top: 1.1rem;
+  background: linear-gradient(to right, #333 5%, transparent, #333);
+  z-index: 1000;
 }
 
 .marquee {
-  width: 100%;
+  margin-left: 0.5rem;
+  width: 15rem;
   white-space: nowrap;
   overflow: hidden;
   color: white;
@@ -59,18 +75,8 @@ body {
   text-indent: 0;
   animation: marquee linear infinite;
   font-size: 14px;
-  font-weight: 400;
+  font-weight: bold;
 }
-
-/*.songtrack-marquee {
-  font-size: 14px;
-  font-weight: 500;
-  white-space: nowrap;
-  width: 15rem;
-  color: white;
-  animation: marquee linear infinite;
-  padding-left: 100%;
-}*/
 
 @keyframes marquee {
   0% {
@@ -81,24 +87,46 @@ body {
   }
 }
 
-#btn_add_soundmark {
+.btn-soundcloud-action {
   height: 2.5rem;
-  width: 9rem;
+  padding: 0 1rem;
   background-color: #ff5500;
   border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+    rgba(0, 0, 0, 0.22) 0px 15px 12px;
 }
 
-#btn_add_soundmark p {
+.btn-soundcloud-action:hover {
+  background-color: #dc4900;
+}
+
+#btn_add_soundmark {
+  position: relative;
+  right: 0.3rem;
+  z-index: 2000;
+}
+
+#settings_link {
+  color: white;
+  margin-right: 0.5rem;
+  font-weight: bold;
+}
+
+.not-playing-info {
+  font-size: 14px;
+  font-weight: 400;
+  margin-top: 0.2rem;
+}
+
+.btn-soundcloud-action p {
   font-size: 16px;
   color: white;
 }
 
-#btn_add_soundmark:hover {
-  background-color: #dc4900;
-}
 #soundmarks_list {
-  max-height: 28rem;
-  width: 28rem;
+  background-color: #1c1c1c;
+  max-height: calc(28rem - 13px);
+  width: calc(28rem - 5px);
 }
 .soundmarkListItem {
   padding: 1rem 0.5rem 1rem;
@@ -108,6 +136,8 @@ body {
   align-items: center;
   height: 2.5rem;
   color: white;
+  transition: all 0.3s;
+  width: calc(28rem - 5px);
 }
 
 .soundmarkListItem:hover {
@@ -117,6 +147,7 @@ body {
 .soundmarkListItemText {
   font-size: 12px;
   font-weight: 400;
+  min-width: 16.5rem;
 }
 
 .soundmarkTrackTimestamp {

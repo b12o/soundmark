@@ -4,22 +4,27 @@
     <link rel="stylesheet" href="popup.css" />
   </head>
   <body>
-    <div class="add-soundmark">
+    <div class="play-status add-soundmark">
       <div class="now-playing">
         <p class="now-playing-text">Now playing:</p>
         <div class="marquee">
-          <span class="songtrack-marquee">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur
-            possimus incidunt cupiditate repellat optio dolor?
-          </span>
+          <div class="marquee-mask"></div>
+          <span class="songtrack-marquee"></span>
         </div>
       </div>
-      <button id="btn_add_soundmark">
+      <button class="btn-soundcloud-action" id="btn_add_soundmark">
         <p>Add soundmark</p>
       </button>
+
+      <a href="./options.html" id="settings_link">
+		<img src="./assets/settings-icon.svg" width="24" height="24" alt="">
+	  </a>
     </div>
-    <div class="soundcloud-not-playing">
-      No soundcloud playing right now. Go to soundcloud ->
+    <div class="play-status not-playing">
+      <p class="not-playing-info">Soundcloud is not playing right now.</p>
+      <button id="go_to_soundcloud" class="btn-soundcloud-action">
+        <p>Go to Soundcloud</p>
+      </button>
     </div>
     <ul id="soundmarks_list"></ul>
   </body>

@@ -54,7 +54,7 @@ const calculateMarqueeSpeed = (speed) => {
 	marqueeSelector.style.animationDuration = timeTaken + "s"
 }
 
-calculateMarqueeSpeed(40)
+calculateMarqueeSpeed(10)
 
 const displaySoundmarkList = async () => {
 	chrome.storage.local.get(["soundmarks"]).then(async res => {
@@ -93,6 +93,9 @@ const displaySoundmarkList = async () => {
 			soundmarkTrackTimestamp.classList.add("soundmarkTrackTimestamp")
 			soundmarkTrackTimestamp.innerHTML = `@ ${soundmark.timeStamp}`
 			soundmarkTrackTimestamp.style.display = "inline"
+			soundmarkTrackTimestamp.addEventListener("click", () => {
+				playSoundmark(soundmark.trackLink, soundmark.timeStamp)
+			})
 
 			const buttonDeleteSoundmark = document.createElement("button")
 			buttonDeleteSoundmark.classList.add("btn-delete-soundmark")
@@ -127,14 +130,14 @@ const displaySoundmarkList = async () => {
 // "Add soundmark" button should only be visibe if a track is currently playing
 const [soundcloudTab] = await chrome.tabs.query({ url: "https://*.soundcloud.com/*", audible: true })
 const [addSoundmarkDiv] = document.getElementsByClassName("add-soundmark")
-const [soundcloudNotPlayingDiv] = document.getElementsByClassName("soundcloud-not-playing")
+const [soundcloudNotPlayingDiv] = document.getElementsByClassName("not-playing")
 if (soundcloudTab) {
 	addSoundmarkDiv.style.display = "flex"
 	soundcloudNotPlayingDiv.style.display = "none"
 }
 else {
 	addSoundmarkDiv.style.display = "none"
-	soundcloudNotPlayingDiv.style.display = "block"
+	soundcloudNotPlayingDiv.style.display = "flex"
 }
 
 // --- Listeners ---
@@ -143,13 +146,22 @@ chrome.runtime.onMessage.addListener((request) => {
 	if (request.message === "refreshSoundmarks") displaySoundmarkList()
 })
 
+document.getElementById("go_to_soundcloud").addEventListener("click", async () => {
+	await chrome.runtime.sendMessage({
+		message: "openSoundcloud",
+		target: "background.js"
+	})
+})
+
 document.getElementById("btn_add_soundmark").addEventListener("click", async () => {
 	// receive soundmark info from soundcloud.com content script
 	const trackInfo = await getTrackInfo()
-	const now = Date.now()
-	trackInfo.message.id = now
-	trackInfo.message.createdAt = now
-	await storeSoundmark(trackInfo)
+	if (trackInfo) {
+		const now = Date.now()
+		trackInfo.message.id = now
+		trackInfo.message.createdAt = now
+		await storeSoundmark(trackInfo)
+	}
 })
 
 const getTrackInfo = async () => {
@@ -157,14 +169,19 @@ const getTrackInfo = async () => {
 		url: "https://*.soundcloud.com/*",
 		audible: true,
 	})
-	const response = await chrome.tabs.sendMessage(
-		soundcloudTab.id,
-		{
-			message: "getTrackInfo",
-			target: "content.js"
-		}
-	)
-	return response
+	if (soundcloudTab) {
+		const response = await chrome.tabs.sendMessage(
+			soundcloudTab.id,
+			{
+				message: "getTrackInfo",
+				target: "content.js"
+			}
+		)
+		return response
+	} else {
+		addSoundmarkDiv.style.display = "none"
+		soundcloudNotPlayingDiv.style.display = "flex"
+	}
 }
 
 if (SOUNDCLOUD_IS_PLAYING) {

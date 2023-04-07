@@ -8,7 +8,7 @@ window.addEventListener("load", () => {
 				sendResponse({
 					message: {
 						trackTitle: trackInfo.title,
-						trackLink: trackInfo.href,
+						trackLink: trackInfo.href.split('?')[0],
 						timeStamp: timeStamp.lastChild.innerHTML,
 					},
 					target: "popup.js"
