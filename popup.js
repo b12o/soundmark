@@ -157,8 +157,8 @@ document.getElementById("btn_add_soundmark").addEventListener("click", async () 
 	// receive soundmark info from soundcloud.com content script
 	const trackInfo = await getTrackInfo()
 	if (trackInfo) {
-		const now = Date.now()
-		trackInfo.message.id = now
+		const now = Math.round(Date.now() / 1000)
+		trackInfo.message.id = Math.random().toString(16).substring(2)
 		trackInfo.message.createdAt = now
 		await storeSoundmark(trackInfo)
 	}

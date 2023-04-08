@@ -1,5 +1,3 @@
-await chrome.storage.local.set({ sortBy: "track_title" }) //TODO: for testing
-
 // should not be visible by default
 document.getElementsByClassName("collapse-soundmarks")[0].style.display = "none"
 document.getElementById("confirm_clear_soundmarks").style.display = "none"
@@ -13,13 +11,16 @@ for (const selectOption of document.getElementsByClassName("select-option")) {
 	if (selectOption.id.includes(sorting.sortBy)) {
 		selectOption.setAttribute("selected", "")
 		if (sorting.sortBy.includes("track_title")) {
+			const isChecked = (await chrome.storage.local.get(["collapseSoundmarks"])).collapseSoundmarks
+			if (isChecked) document.getElementById("collapse_soundmarks").checked = isChecked
 			document.getElementsByClassName("collapse-soundmarks")[0].style.display = "block"
 		}
 	}
 }
 // if user selects sort by track title, add further option to collapse soundmarks from same track
-document.getElementById("sort_by").addEventListener("change", evt => {
-	if (evt.target.value === "track_title") {
+document.getElementById("sort_by").addEventListener("change", async evt => {
+	sortSelected = evt.target.value
+	if (sortSelected === "track_title") {
 		document.getElementsByClassName("collapse-soundmarks")[0].style.display = "block"
 	}
 	else {
@@ -57,6 +58,29 @@ if (document.getElementById("confirm_clear_soundmarks")) {
 	})
 }
 
+const saveSoundmarksButton = document.getElementById("export_soundmarks")
+saveSoundmarksButton.addEventListener("click", async () => {
+	const soundmarks = (await chrome.storage.local.get(["soundmarks"])).soundmarks
+	const soundmarksJson = JSON.stringify(soundmarks)
+	const blob = new Blob([soundmarksJson], {
+		type: "application/json"
+	})
+	chrome.downloads.download({
+		url: window.URL.createObjectURL(blob),
+		filename: "soundmarks.json"
+	})
+})
+
+document.getElementById("save_options").addEventListener("click", async () => {
+	if (sortSelected) {
+		await chrome.storage.local.set({ sortBy: sortSelected })
+	}
+	const collapseSoundmarks = document.getElementById("collapse_soundmarks")
+	if (collapseSoundmarks) {
+		await chrome.storage.local.set({ collapseSoundmarks: collapseSoundmarks.checked })
+	}
+	window.location.href = "./popup.html"
+})
 
 
 

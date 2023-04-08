@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "name": "Soundmark",
   "description": "Soundmark - Create Soundcloud Timestamps",
-  "permissions": ["tabs", "scripting", "storage"],
+  "permissions": ["tabs", "storage","downloads"],
   "options_page": "options.html",
   "action": {
     "default_popup": "popup.html",
