@@ -35,13 +35,16 @@ const getSoundcloudTab = async () => {
 
 }
 
-chrome.storage.onChanged.addListener(() => {
-	chrome.storage.local.get(["soundmarks"]).then(async () => {
-		await chrome.runtime.sendMessage({
-			message: "refreshSoundmarks",
-			target: "popup.js"
+chrome.storage.onChanged.addListener((changes) => {
+	let [key] = Object.entries(changes)[0]
+	if (key === "soundmarks") {
+		chrome.storage.local.get(["soundmarks"]).then(async () => {
+			await chrome.runtime.sendMessage({
+				message: "refreshSoundmarks",
+				target: "popup.js"
+			})
 		})
-	})
+	}
 })
 
 chrome.runtime.onMessage.addListener(async (request) => {

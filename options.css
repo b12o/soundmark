@@ -8,7 +8,6 @@
 html,
 body {
   width: 20rem;
-  height: 15rem;
 }
 
 body {
@@ -33,13 +32,13 @@ body {
   background-color: #333;
 }
 
-.collapse-timestamps {
+.collapse-soundmarks {
   margin-top: 0.5rem;
 }
-.collapse-timestamps label {
+.collapse-soundmarks label {
   font-size: 14px;
 }
-.collapse-timestamps input {
+.collapse-soundmarks input {
   width: 1rem;
   height: 1rem;
   position: relative;
@@ -69,6 +68,40 @@ body {
 .btn-clear-soundmarks:hover {
   color: white;
   background-color: #d0342c;
+}
+
+.clear-soundmarks-confirmation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 2.2rem;
+  margin-top: 2rem;
+}
+.clear-soundmarks-confirmation p {
+  font-size: 16px;
+  font-weight: 600;
+}
+.btn-clear-soundmarks-confirmation {
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  background-color: transparent;
+  transition: all 0.3s;
+}
+.btn-confirm-yes {
+  border: 2px solid #d0342c;
+  color: #d0342c;
+}
+.btn-confirm-yes:hover {
+  color: white;
+  background-color: #d0342c;
+}
+.btn-confirm-no {
+  border: 2px solid #3eb489;
+  color: #3eb489;
+}
+.btn-confirm-no:hover {
+  color: white;
+  background-color: #3eb489;
 }
 
 .import-export button {

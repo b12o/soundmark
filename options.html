@@ -9,22 +9,39 @@
       <div class="sort-by-container">
         <label class="sort-by-label" for="sort_by">Sort soundmarks by</label>
         <select class="sort-select" name="sort_by" id="sort_by">
-          <option class="select-option" value="newest">newest</option>
-          <option class="select-option" value="oldest">oldest</option>
-          <option class="select-option" value="trackTitle">track title</option>
+          <option class="select-option" id="sort_by_newest" value="newest">
+            newest
+          </option>
+          <option class="select-option" id="sort_by_oldest" value="oldest">
+            oldest
+          </option>
+          <option
+            class="select-option"
+            id="sort_by_track_title"
+            value="track_title"
+          >
+            track title
+          </option>
         </select>
-        <div class="collapse-timestamps">
-          <label for="collapse_timestamps"
+        <div class="collapse-soundmarks">
+          <label for="collapse_soundmarks"
             >Collapse soundmarks of the same track?</label
           >
           <input
             type="checkbox"
-            name="collapse_timestamps"
-            id="collapse_timestamps"
+            name="collapse_soundmarks"
+            id="collapse_soundmarks"
           />
         </div>
       </div>
-      <button class="btn-option btn-clear-soundmarks">Clear soundmarks</button>
+      <button class="btn-option btn-clear-soundmarks" id="clear_soundmarks">
+        Clear soundmarks
+      </button>
+      <div class="clear-soundmarks-confirmation" id="confirm_clear_soundmarks">
+        <p>Are you sure?</p>
+        <button class="btn-clear-soundmarks-confirmation btn-confirm-yes">YES</button>
+        <button class="btn-clear-soundmarks-confirmation btn-confirm-no">NO</button>
+      </div>
       <div class="import-export">
         <button class="btn-option btn-import" id="import-soundmarks">
           Load from file

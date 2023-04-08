@@ -150,6 +150,7 @@ document.getElementById("go_to_soundcloud").addEventListener("click", async () =
 		message: "openSoundcloud",
 		target: "background.js"
 	})
+	window.close()
 })
 
 document.getElementById("btn_add_soundmark").addEventListener("click", async () => {
