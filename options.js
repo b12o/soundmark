@@ -1,8 +1,39 @@
+const validateImportedSoundmarks = (soundmarksJson) => {
+	/* 
+	validation criteria:
+		- requires createdAt property
+		- requires id property
+		- requires timeStamp property
+		- requires trackLink property
+		- requires trackTitle property
+		
+		- trackLink must start with https://soundcloud.com/
+	*/
+	console.log(soundmarksJson)
+	return false;
+}
+
+const importSoundmarks = async (file) => {
+	let soundmarksJson
+	try {
+		soundmarksJson = JSON.parse(file)
+	}
+	catch {
+		alert("Could not read file.")
+		return
+	}
+	if (validateImportedSoundmarks(soundmarksJson)) {
+		chrome.storage.local.set({ soundmarks: soundmarksJson })
+	}
+	else alert("something went wrong while importing file.")
+}
+
+
 // should not be visible by default
 document.getElementsByClassName("collapse-soundmarks")[0].style.display = "none"
 document.getElementById("confirm_clear_soundmarks").style.display = "none"
 
-let sortSelected = undefined // TODO: when saving, check if undefined
+let sortSelected
 const numberOfSoundmarks = (await chrome.storage.local.get(["soundmarks"])).soundmarks.length
 
 // get sorting preference from chrome storage
@@ -21,6 +52,8 @@ for (const selectOption of document.getElementsByClassName("select-option")) {
 document.getElementById("sort_by").addEventListener("change", async evt => {
 	sortSelected = evt.target.value
 	if (sortSelected === "track_title") {
+		const isChecked = (await chrome.storage.local.get(["collapseSoundmarks"])).collapseSoundmarks
+		if (isChecked) document.getElementById("collapse_soundmarks").checked = isChecked
 		document.getElementsByClassName("collapse-soundmarks")[0].style.display = "block"
 	}
 	else {
@@ -58,9 +91,29 @@ if (document.getElementById("confirm_clear_soundmarks")) {
 	})
 }
 
+// import 
+const fileSelector = document.createElement("input")
+fileSelector.id = "fileSelector"
+fileSelector.style.display = "none"
+fileSelector.setAttribute("type", "file")
+fileSelector.onchange = () => {
+	const reader = new FileReader()
+	reader.onload = e => {
+		importSoundmarks(e.target.result)
+	}
+	reader.readAsText(fileSelector.files[0])
+}
+document.body.appendChild(fileSelector)
+
+const loadSoundmarksButton = document.getElementById("import_soundmarks")
+loadSoundmarksButton.addEventListener("click", () => {
+	fileSelector.click()
+})
+
 const saveSoundmarksButton = document.getElementById("export_soundmarks")
 saveSoundmarksButton.addEventListener("click", async () => {
-	const soundmarks = (await chrome.storage.local.get(["soundmarks"])).soundmarks
+	let soundmarks = (await chrome.storage.local.get(["soundmarks"])).soundmarks
+	soundmarks.forEach(x => x.createdAt = new Date(x.createdAt * 1000).toLocaleString())
 	const soundmarksJson = JSON.stringify(soundmarks)
 	const blob = new Blob([soundmarksJson], {
 		type: "application/json"

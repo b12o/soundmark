@@ -66,6 +66,7 @@ chrome.runtime.onMessage.addListener(async (request) => {
 		const soundcloudTab = await getSoundcloudTab()
 
 		if (soundcloudTab) {
+			const soundcloudTabIndex = soundcloudTab.index
 			const tabWindow = soundcloudTab.windowId
 			await chrome.windows.update(tabWindow, { focused: true })
 			await chrome.tabs.update(soundcloudTab.id, { highlighted: true })
@@ -74,7 +75,8 @@ chrome.runtime.onMessage.addListener(async (request) => {
 				// can not reload a tab if the url is identical, so recreate tab.
 				await chrome.tabs.create({
 					url: `${trackLink}#t=${timeStamp}`,
-					windowId: tabWindow
+					windowId: tabWindow,
+					index: soundcloudTabIndex
 				})
 				await chrome.tabs.remove(soundcloudTab.id)
 			}
