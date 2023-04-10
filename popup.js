@@ -7,6 +7,26 @@ const SOUNDCLOUD_IS_PLAYING = (await chrome.tabs.query({
 
 let STYLESHEET = undefined
 
+const getTrackInfo = async () => {
+	const [soundcloudTab] = await chrome.tabs.query({
+		url: "https://*.soundcloud.com/*",
+		audible: true,
+	})
+	if (soundcloudTab) {
+		const response = await chrome.tabs.sendMessage(
+			soundcloudTab.id,
+			{
+				message: "getTrackInfo",
+				target: "content.js"
+			}
+		)
+		return response
+	} else {
+		addSoundmarkDiv.style.display = "none"
+		soundcloudNotPlayingDiv.style.display = "flex"
+	}
+}
+
 const storeSoundmark = async (response) => {
 	const { id, trackTitle, trackLink, timeStamp, createdAt } = response.message
 	chrome.storage.local.get(["soundmarks"]).then((res) => {
@@ -57,9 +77,23 @@ const calculateMarqueeSpeed = (speed) => {
 
 calculateMarqueeSpeed(10)
 
+const getTimestampInSeconds = (timestampString) => {
+	let seconds = 0
+	let multiplier = 1
+	for (let num of timestampString.split(':').reverse()) {
+		seconds += parseInt(num) * multiplier
+		multiplier *= 60
+	}
+	return seconds
+}
+
 const displaySoundmarkList = async () => {
 	const sortBy = (await chrome.storage.local.get(["sortBy"])).sortBy
 	chrome.storage.local.get(["soundmarks"]).then(async res => {
+
+		if (res.soundmarks.length === 0) {
+			document.getElementById("soundmarks_empty").style.display = "block"
+		}
 
 		if (res.soundmarks.length > 12) {
 			// check if injected stylesheet already exists in the DOM
@@ -77,10 +111,17 @@ const displaySoundmarkList = async () => {
 
 		let soundmarks = res.soundmarks ?? []
 		if (soundmarks.length && sortBy === "newest") {
-			soundmarks = res.soundmarks.sort((a, b) => b.createdAt - a.createdAt)
+			soundmarks = soundmarks.sort((a, b) => b.createdAt - a.createdAt)
 		}
 		if (soundmarks.length && sortBy === "oldest") {
-			soundmarks = res.soundmarks.sort((a, b) => a.createdAt - b.createdAt)
+			soundmarks = soundmarks.sort((a, b) => a.createdAt - b.createdAt)
+		}
+		if (soundmarks.length && sortBy === "track_title") {
+			// first sort all soundmarks by timestamp location, then sort by track title
+			soundmarks.forEach(x => x.timestampInSeconds = getTimestampInSeconds(x.timeStamp))
+			soundmarks = soundmarks
+				.sort((a, b) => a.timestampInSeconds - b.timestampInSeconds)
+				.sort((a, b) => a.trackTitle.localeCompare(b.trackTitle))
 		}
 
 		const soundmarkListItems = []
@@ -147,10 +188,11 @@ else {
 	soundcloudNotPlayingDiv.style.display = "flex"
 }
 
-// --- Listeners ---
 
 chrome.runtime.onMessage.addListener((request) => {
-	if (request.message === "refreshSoundmarks") displaySoundmarkList()
+	if (request.message === "refreshSoundmarks") {
+		window.location.reload()
+	}
 })
 
 document.getElementById("go_to_soundcloud").addEventListener("click", async () => {
@@ -172,25 +214,6 @@ document.getElementById("btn_add_soundmark").addEventListener("click", async () 
 	}
 })
 
-const getTrackInfo = async () => {
-	const [soundcloudTab] = await chrome.tabs.query({
-		url: "https://*.soundcloud.com/*",
-		audible: true,
-	})
-	if (soundcloudTab) {
-		const response = await chrome.tabs.sendMessage(
-			soundcloudTab.id,
-			{
-				message: "getTrackInfo",
-				target: "content.js"
-			}
-		)
-		return response
-	} else {
-		addSoundmarkDiv.style.display = "none"
-		soundcloudNotPlayingDiv.style.display = "flex"
-	}
-}
 
 if (SOUNDCLOUD_IS_PLAYING) {
 	const res = await getTrackInfo()

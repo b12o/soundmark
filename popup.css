@@ -111,7 +111,8 @@ body {
 }
 
 .not-playing-info {
-  font-size: 14px;
+  font-size: 13px;
+  font-style: italic;
   font-weight: 400;
   margin-top: 0.2rem;
 }
@@ -119,6 +120,14 @@ body {
 .btn-soundcloud-action p {
   font-size: 16px;
   color: white;
+}
+
+.soundmarks-empty {
+  text-align: center;
+  margin-top: 1.5rem;
+  color: white;
+  display: none;
+  font-size: 16px;
 }
 
 #soundmarks_list {

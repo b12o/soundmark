@@ -6,7 +6,7 @@ const validate = async (parsedFile) => {
 		const { result, reason, soundmarks } = validateSoundmarks(parsedFile)
 		if (result) {
 			await chrome.storage.local.set({ soundmarks })
-			document.getElementById("upload_title").innerText = "Successfully loaded soundmarks file!"
+			document.getElementById("upload_title").innerText = "Successfully imported soundmarks file!"
 			document.getElementById("import_success").style.display = "block"
 			document.getElementById("select_file").style.display = "none"
 		}

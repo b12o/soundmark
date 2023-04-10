@@ -32,20 +32,6 @@ body {
   background-color: #333;
 }
 
-.collapse-soundmarks {
-  margin-top: 0.5rem;
-}
-.collapse-soundmarks label {
-  font-size: 14px;
-}
-.collapse-soundmarks input {
-  width: 1rem;
-  height: 1rem;
-  position: relative;
-  top: 2px;
-  left: 6px;
-}
-
 .btn-option {
   background-color: #999;
   padding: 0.5rem 0;
