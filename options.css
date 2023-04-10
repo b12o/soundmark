@@ -119,6 +119,7 @@ body {
   height: 2rem;
   width: 18rem;
   margin-top: 0.5rem;
+  margin-bottom: -1rem;
 }
 
 .btn-save-options {

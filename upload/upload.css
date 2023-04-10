@@ -1,0 +1,46 @@
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  box-sizing: border-box;
+}
+
+html {
+  background-color: #333;
+}
+html,
+body {
+  width: 100%;
+}
+
+h1,
+h2 {
+  color: #ddd;
+}
+.main {
+  margin: 10rem auto 0;
+  width: 30rem;
+  text-align: center;
+}
+
+#select_file {
+  cursor: pointer;
+  background-color: transparent;
+  border: 2px solid #ff5500;
+  color: #ff5500;
+  font-size: 18px;
+  border-radius: 10px;
+  width: 20rem;
+  height: 3rem;
+  margin-top: 2rem;
+  transition: all 0.3s;
+}
+#select_file:hover {
+  background-color: #ff5500;
+  color: white;
+}
+
+#import_success {
+  display: none;
+  margin-top: 1rem;
+}

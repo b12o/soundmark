@@ -1,40 +1,10 @@
-const validateImportedSoundmarks = (soundmarksJson) => {
-	/* 
-	validation criteria:
-		- requires createdAt property
-		- requires id property
-		- requires timeStamp property
-		- requires trackLink property
-		- requires trackTitle property
-		
-		- trackLink must start with https://soundcloud.com/
-	*/
-	console.log(soundmarksJson)
-	return false;
-}
-
-const importSoundmarks = async (file) => {
-	let soundmarksJson
-	try {
-		soundmarksJson = JSON.parse(file)
-	}
-	catch {
-		alert("Could not read file.")
-		return
-	}
-	if (validateImportedSoundmarks(soundmarksJson)) {
-		chrome.storage.local.set({ soundmarks: soundmarksJson })
-	}
-	else alert("something went wrong while importing file.")
-}
-
-
 // should not be visible by default
 document.getElementsByClassName("collapse-soundmarks")[0].style.display = "none"
 document.getElementById("confirm_clear_soundmarks").style.display = "none"
 
 let sortSelected
 const numberOfSoundmarks = (await chrome.storage.local.get(["soundmarks"])).soundmarks.length
+console.log(numberOfSoundmarks)
 
 // get sorting preference from chrome storage
 const sorting = await chrome.storage.local.get(["sortBy"])
@@ -66,7 +36,7 @@ const clearSoundmarksButton = document.getElementById("clear_soundmarks")
 const confirmClearSoundmarks = document.getElementById("confirm_clear_soundmarks")
 
 if (!numberOfSoundmarks) {
-	clearSoundmarksButton.getElementById("clear_soundmarks").style.display = "none"
+	document.getElementById("clear_soundmarks").style.display = "none"
 } else {
 	clearSoundmarksButton.addEventListener("click", () => {
 		clearSoundmarksButton.style.display = "none"
@@ -78,11 +48,11 @@ if (document.getElementById("confirm_clear_soundmarks")) {
 	const [yesButton] = document.getElementsByClassName("btn-confirm-yes")
 	const [noButton] = document.getElementsByClassName("btn-confirm-no")
 
-	// TODO: implement after saving soundmarks to file has been implemented 
-	yesButton.addEventListener("click", () => {
-		alert("ok. will delete soundmarks")
+	yesButton.addEventListener("click", async () => {
+		await chrome.storage.local.set({ "soundmarks": [] })
 		confirmClearSoundmarks.style.display = "none";
 		clearSoundmarksButton.style.display = "block"
+		window.location.reload()
 	})
 
 	noButton.addEventListener("click", () => {
@@ -91,25 +61,14 @@ if (document.getElementById("confirm_clear_soundmarks")) {
 	})
 }
 
-// import 
-const fileSelector = document.createElement("input")
-fileSelector.id = "fileSelector"
-fileSelector.style.display = "none"
-fileSelector.setAttribute("type", "file")
-fileSelector.onchange = () => {
-	const reader = new FileReader()
-	reader.onload = e => {
-		importSoundmarks(e.target.result)
-	}
-	reader.readAsText(fileSelector.files[0])
-}
-document.body.appendChild(fileSelector)
-
-const loadSoundmarksButton = document.getElementById("import_soundmarks")
-loadSoundmarksButton.addEventListener("click", () => {
-	fileSelector.click()
+// import
+document.getElementById("import_soundmarks").addEventListener("click", async () => {
+	await chrome.tabs.create({
+		url: "./upload/upload.html"
+	})
 })
 
+// export
 const saveSoundmarksButton = document.getElementById("export_soundmarks")
 saveSoundmarksButton.addEventListener("click", async () => {
 	let soundmarks = (await chrome.storage.local.get(["soundmarks"])).soundmarks
@@ -124,6 +83,7 @@ saveSoundmarksButton.addEventListener("click", async () => {
 	})
 })
 
+// save settings
 document.getElementById("save_options").addEventListener("click", async () => {
 	if (sortSelected) {
 		await chrome.storage.local.set({ sortBy: sortSelected })
@@ -134,6 +94,3 @@ document.getElementById("save_options").addEventListener("click", async () => {
 	}
 	window.location.href = "./popup.html"
 })
-
-
-

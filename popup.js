@@ -58,6 +58,7 @@ const calculateMarqueeSpeed = (speed) => {
 calculateMarqueeSpeed(10)
 
 const displaySoundmarkList = async () => {
+	const sortBy = (await chrome.storage.local.get(["sortBy"])).sortBy
 	chrome.storage.local.get(["soundmarks"]).then(async res => {
 
 		if (res.soundmarks.length > 12) {
@@ -74,7 +75,14 @@ const displaySoundmarkList = async () => {
 			}
 		}
 
-		let soundmarks = res.soundmarks.sort((a, b) => b.createdAt - a.createdAt) ?? [] //TODO : sort based on criteria specidied by user
+		let soundmarks = res.soundmarks ?? []
+		if (soundmarks.length && sortBy === "newest") {
+			soundmarks = res.soundmarks.sort((a, b) => b.createdAt - a.createdAt)
+		}
+		if (soundmarks.length && sortBy === "oldest") {
+			soundmarks = res.soundmarks.sort((a, b) => a.createdAt - b.createdAt)
+		}
+
 		const soundmarkListItems = []
 
 		for (const soundmark of soundmarks) {
