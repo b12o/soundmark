@@ -1,8 +1,8 @@
 * {
-  border: 0;
   margin: 0;
-  padding: 0;
+  border: 0;
   box-sizing: border-box;
+  padding: 0;
 }
 
 li {
@@ -24,53 +24,53 @@ body {
   flex-flow: row nowrap;
   justify-content: space-around;
   align-items: center;
-  height: 5rem;
   width: 28rem;
+  height: 5rem;
   background-color: #333;
   color: white;
 }
 
 .now-playing {
+  position: relative;
+  z-index: 2000;
   margin-top: 0.5rem;
   width: 16rem;
   height: 3rem;
-  position: relative;
-  z-index: 2000;
 }
 
 .now-playing-text {
-  font-style: italic;
-  font-size: 12px;
+  z-index: 2000;
   margin-bottom: 0.2rem;
   margin-left: 0.5rem;
+  font-style: italic;
+  font-size: 12px;
   color: white;
-  z-index: 2000;
 }
 
 .marquee:before {
   content: "";
+  position: absolute;
+  z-index: 1000;
+  top: 1.1rem;
+  left: 0;
   width: 95%;
   height: 1.3rem;
-  position: absolute;
-  left: 0;
-  top: 1.1rem;
   background: linear-gradient(to right, #333 5%, transparent, #333 98%);
-  z-index: 1000;
 }
 
 .marquee {
+  overflow: hidden;
+  white-space: nowrap;
   margin-left: 0.5rem;
   width: 14.5rem;
-  white-space: nowrap;
-  overflow: hidden;
   color: white;
 }
 
 .marquee span {
   display: inline-block;
+  animation: marquee linear infinite;
   padding-left: 100%;
   text-indent: 0;
-  animation: marquee linear infinite;
   font-size: 14px;
   font-weight: bold;
 }
@@ -85,11 +85,11 @@ body {
 }
 
 .btn-soundcloud-action {
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
   height: 2.5rem;
   padding: 0 1rem;
   background-color: #ff5500;
-  border-radius: 10px;
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
 
 .btn-soundcloud-action:hover {
@@ -98,23 +98,23 @@ body {
 
 #btn_add_soundmark {
   position: relative;
-  right: 0.8rem;
   z-index: 2000;
+  right: 0.8rem;
 }
 
 #settings_link {
-  color: white;
-  margin-right: 0.5rem;
-  font-weight: bold;
   position: relative;
   right: 0.25rem;
+  margin-right: 0.5rem;
+  font-weight: bold;
+  color: white;
 }
 
 .not-playing-info {
+  margin-top: 0.2rem;
   font-size: 13px;
   font-style: italic;
   font-weight: 400;
-  margin-top: 0.2rem;
 }
 
 .btn-soundcloud-action p {
@@ -123,28 +123,28 @@ body {
 }
 
 .soundmarks-empty {
-  text-align: center;
-  margin-top: 1.5rem;
-  color: white;
   display: none;
+  margin-top: 1.5rem;
   font-size: 16px;
+  text-align: center;
+  color: white;
 }
 
 #soundmarks_list {
-  background-color: #1c1c1c;
-  max-height: calc(2.5rem * 12);
   width: 28rem;
+  max-height: calc(2.5rem * 12);
+  background-color: #1c1c1c;
 }
 .soundmarkListItem {
-  padding: 1rem 0.5rem 1rem;
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
   align-items: center;
-  height: 2.5rem;
-  color: white;
   transition: all 0.3s;
   width: 28rem;
+  height: 2.5rem;
+  padding: 1rem 0.5rem 1rem;
+  color: white;
 }
 
 .soundmarkListItem:hover {
@@ -152,9 +152,9 @@ body {
 }
 
 .soundmarkListItemText {
+  min-width: 16.5rem;
   font-size: 12px;
   font-weight: 400;
-  min-width: 16.5rem;
 }
 
 .soundmarkTrackTimestamp {
@@ -162,6 +162,6 @@ body {
 }
 
 button {
-  cursor: pointer;
   background: transparent;
+  cursor: pointer;
 }

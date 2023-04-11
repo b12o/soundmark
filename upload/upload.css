@@ -17,13 +17,13 @@ h1,
 h2 {
   color: #ddd;
 }
-.main {
+.container {
   margin: 10rem auto 0;
   width: 30rem;
   text-align: center;
 }
 
-#select_file {
+#btn_select_file {
   cursor: pointer;
   background-color: transparent;
   border: 2px solid #ff5500;
@@ -35,7 +35,7 @@ h2 {
   margin-top: 2rem;
   transition: all 0.3s;
 }
-#select_file:hover {
+#btn_select_file:hover {
   background-color: #ff5500;
   color: white;
 }

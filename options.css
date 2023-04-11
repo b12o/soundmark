@@ -1,8 +1,8 @@
 * {
-  border: 0;
   margin: 0;
-  padding: 0;
+  border: 0;
   box-sizing: border-box;
+  padding: 0;
 }
 
 html,
@@ -16,78 +16,88 @@ body {
 }
 
 .settings {
-  width: 18rem;
   margin: 2rem auto;
+  width: 18rem;
 }
 
 .sort-by-label {
   font-size: 16px;
 }
+
 .sort-select {
   margin-left: 0.5rem;
   background: transparent;
   color: white;
 }
+
 .select-option {
   background-color: #333;
 }
 
-.btn-option {
-  background-color: #999;
+.btn {
+  transition: all 0.3s;
+  border-radius: 8px;
   padding: 0.5rem 0;
   min-width: 8.8rem;
-  border-radius: 8px;
+  background-color: #999;
   cursor: pointer;
-  transition: all 0.3s;
 }
-.btn-option:hover {
+
+.btn:hover {
   background-color: #555;
   color: white;
 }
 
 .btn-clear-soundmarks {
-  border: 2px solid #d0342c;
-  color: #d0342c;
-  background-color: transparent;
   margin-top: 2rem;
+  border: 2px solid #d0342c;
+  background-color: transparent;
+  color: #d0342c;
 }
+
 .btn-clear-soundmarks:hover {
-  color: white;
   background-color: #d0342c;
+  color: white;
 }
 
 .clear-soundmarks-confirmation {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 2.2rem;
   margin-top: 2rem;
+  height: 2.2rem;
 }
+
 .clear-soundmarks-confirmation p {
   font-size: 16px;
   font-weight: 600;
 }
+
 .btn-clear-soundmarks-confirmation {
+  transition: all 0.3s;
   border-radius: 5px;
   padding: 0.5rem 1rem;
   background-color: transparent;
-  transition: all 0.3s;
 }
+
 .btn-confirm-yes {
   border: 2px solid #d0342c;
   color: #d0342c;
 }
+
 .btn-confirm-yes:hover {
-  color: white;
   background-color: #d0342c;
+  color: white;
 }
+
 .btn-confirm-no {
   border: 2px solid #3eb489;
   color: #3eb489;
 }
+
 .btn-confirm-no:hover {
-  color: white;
   background-color: #3eb489;
+  color: white;
 }
 
 .import-export button {
@@ -101,17 +111,17 @@ body {
   width: 18rem;
 }
 
-.save-options {
-  height: 2rem;
-  width: 18rem;
+.save-settings {
   margin-top: 0.5rem;
   margin-bottom: -1rem;
+  width: 18rem;
+  height: 2rem;
 }
 
-.btn-save-options {
+.btn-save-settings {
   width: 100%;
 }
 
-.btn-save-options:hover {
+.btn-save-settings:hover {
   color: white;
 }
