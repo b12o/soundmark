@@ -1,5 +1,4 @@
 window.addEventListener("load", () => {
-
 	chrome.runtime.onMessage.addListener(
 		(request, _, sendResponse) => {
 			if (request.message === "getTrackInfo") {

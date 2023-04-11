@@ -1,38 +1,25 @@
-// if no sorting criteria exists, det default to 'newest'
 const sorting = chrome.storage.local.get(["sortBy"]).then(async (res) => {
 	if (!res.sortBy) await chrome.storage.local.set({ sortBy: "newest" })
 })
 
-// if no theme preference exists, set default to 'light'
-const theme = chrome.storage.local.get(["theme"]).then(async (res) => {
-	if (!res.theme) await chrome.storage.local.set({ theme: "light" })
-})
-
 const getSoundcloudTab = async () => {
-	// find currently playing soundcloud tab
 	let [soundcloudTab] = await chrome.tabs.query({
 		url: "https://*.soundcloud.com/*",
 		audible: true,
 	})
-
-	// if no soundcloud tab is playing, find soundcloud tab in this current window
 	if (!soundcloudTab) {
 		[soundcloudTab] = await chrome.tabs.query({
 			url: "https://*.soundcloud.com/*",
 			lastFocusedWindow: true
 		})
 	}
-
-	// if no soundcloud tab in last focused window has been found, find any active soundcloud tab
 	if (!soundcloudTab) {
 		[soundcloudTab] = await chrome.tabs.query({
 			url: "https://*.soundcloud.com/*",
 		})
 	}
-
 	if (soundcloudTab) return soundcloudTab
 	else return false
-
 }
 
 chrome.storage.onChanged.addListener((changes) => {
@@ -62,7 +49,6 @@ chrome.runtime.onMessage.addListener(async (request) => {
 	if (request.message === "playSoundmark") {
 		const trackLink = request.trackLink
 		const timeStamp = request.timeStamp
-
 		const soundcloudTab = await getSoundcloudTab()
 
 		if (soundcloudTab) {
