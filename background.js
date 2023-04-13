@@ -26,10 +26,14 @@ chrome.storage.onChanged.addListener((changes) => {
 	let [key] = Object.entries(changes)[0]
 	if (key === "soundmarks") {
 		chrome.storage.local.get(["soundmarks"]).then(async () => {
-			await chrome.runtime.sendMessage({
-				message: "refreshSoundmarks",
-				target: "popup.js"
-			})
+			try {
+				await chrome.runtime.sendMessage({
+					message: "refreshSoundmarks",
+					target: "popup.js"
+				})
+			} catch {
+				console.log("popup.html not active. No need to send refresh message")
+			}
 		})
 	}
 })

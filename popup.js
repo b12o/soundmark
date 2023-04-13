@@ -4,6 +4,8 @@ let STYLESHEET = undefined
 
 const [soundcloudTab] = await chrome.tabs.query({ url: "https://*.soundcloud.com/*", audible: true })
 const [addSoundmarkDiv] = document.getElementsByClassName("add-soundmark")
+const [marquee] = document.getElementsByClassName("marquee")
+const [songTrackMarquee] = document.getElementsByClassName("songtrack-marquee")
 const [soundcloudNotPlayingDiv] = document.getElementsByClassName("not-playing")
 const goToSoundcloudButton = document.getElementById("go_to_soundcloud")
 const addSoundmarkButton = document.getElementById("btn_add_soundmark")
@@ -75,10 +77,9 @@ const truncateTitle = (trackTitle, limit) => {
 
 const calculateMarqueeSpeed = (speed) => {
 	// time = distance / speed
-	let [marqueeSelector] = document.getElementsByClassName("songtrack-marquee")
-	let marqueeSelectorLength = marqueeSelector.offsetWidth;
-	let timeTaken = marqueeSelectorLength / speed;
-	marqueeSelector.style.animationDuration = timeTaken + "s"
+	let songTrackMarqueeLength = songTrackMarquee.offsetWidth;
+	let timeTaken = songTrackMarqueeLength / speed;
+	songTrackMarquee.style.animationDuration = timeTaken + "s"
 }
 
 calculateMarqueeSpeed(10)
@@ -199,6 +200,14 @@ chrome.runtime.onMessage.addListener((request) => {
 	if (request.message === "refreshSoundmarks") {
 		window.location.reload()
 	}
+})
+
+marquee.addEventListener("click", async () => {
+	await chrome.runtime.sendMessage({
+		message: "openSoundcloud",
+		target: "background.js"
+	})
+	window.close()
 })
 
 goToSoundcloudButton.addEventListener("click", async () => {
