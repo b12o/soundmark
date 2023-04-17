@@ -24,6 +24,7 @@ const getSoundcloudTab = async () => {
 
 chrome.storage.onChanged.addListener((changes) => {
 	let [key] = Object.entries(changes)[0]
+	console.log(key)
 	if (key === "soundmarks") {
 		chrome.storage.local.get(["soundmarks"]).then(async () => {
 			try {
@@ -32,7 +33,7 @@ chrome.storage.onChanged.addListener((changes) => {
 					target: "popup.js"
 				})
 			} catch {
-				console.log("popup.html not active. No need to send refresh message")
+				console.log("popup.html not active. No need to send refresh")
 			}
 		})
 	}
