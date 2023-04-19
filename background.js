@@ -2,12 +2,11 @@ chrome.storage.local.clear()
 
 chrome.storage.local.get(["soundmarks"]).then(async res => {
 	if (!res.soundmarks) {
-		await chrome.storage.local.set({ soundmarks: [] })
+		await chrome.storage.local.set({
+			soundmarks: [],
+			sortBy: "newest"
+		})
 	}
-})
-
-const sorting = chrome.storage.local.get(["sortBy"]).then(async (res) => {
-	if (!res.sortBy) await chrome.storage.local.set({ sortBy: "newest" })
 })
 
 const getSoundcloudTab = async () => {
