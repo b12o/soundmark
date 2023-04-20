@@ -1,5 +1,3 @@
-chrome.storage.local.clear()
-
 chrome.storage.local.get(["soundmarks"]).then(async res => {
 	if (!res.soundmarks) {
 		await chrome.storage.local.set({
