@@ -4,10 +4,12 @@ const validateSoundmarks = (soundmarksArray) => {
 		return { result: false, message: "Can not read file", soundmarks: undefined }
 	}
 	for (let item of soundmarksArray) {
+		console.log(item)
 		if (!item.createdAt
 			|| !item.id
 			|| !item.timeStamp
 			|| !item.trackLink
+			|| isNaN(item.timesPlayed) 
 			|| !item.trackTitle) {
 			return { result: false, message: "A required property does not exist.", soundmarks: undefined }
 		}

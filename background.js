@@ -5,6 +5,16 @@ chrome.storage.local.get(["soundmarks"]).then(async res => {
 			sortBy: "newest"
 		})
 	}
+	else {
+		for (const soundmark of res.soundmarks) {
+			if (!soundmark["timesPlayed"]) {
+				soundmark["timesPlayed"] = 0
+			}
+		}
+		await chrome.storage.local.set({
+			soundmarks: res.soundmarks
+		})
+	}
 })
 
 const getSoundcloudTab = async () => {
@@ -57,6 +67,7 @@ chrome.runtime.onMessage.addListener(async (request) => {
 		}
 	}
 	if (request.message === "playSoundmark") {
+		const soundmarkId = request.id
 		const trackLink = request.trackLink
 		const timeStamp = request.timeStamp
 		const soundcloudTab = await getSoundcloudTab()
@@ -83,6 +94,12 @@ chrome.runtime.onMessage.addListener(async (request) => {
 		else {
 			await chrome.tabs.create({ url: `${trackLink}#t=${timeStamp}` })
 		}
+		let soundmarks = (await chrome.storage.local.get(["soundmarks"])).soundmarks
+		const soundmark = soundmarks.find(soundmark => soundmark.id === soundmarkId)
+		soundmark["timesPlayed"] += 1
+		await chrome.storage.local.set({
+			soundmarks: soundmarks
+		})
 	}
 
 	if (request.message === "deleteSoundmark") {

@@ -44,15 +44,17 @@ const storeSoundmark = async (response) => {
 			trackTitle,
 			trackLink,
 			timeStamp,
-			createdAt
+			createdAt,
+			timesPlayed: 1
 		})
 		chrome.storage.local.set({ soundmarks })
 	})
 }
 
-const playSoundmark = async (trackLink, timeStamp) => {
+const playSoundmark = async (id, trackLink, timeStamp) => {
 	await chrome.runtime.sendMessage({
 		message: "playSoundmark",
+		id,
 		trackLink,
 		timeStamp,
 		target: "background.js"
@@ -130,6 +132,13 @@ const displaySoundmarkList = async () => {
 				.sort((a, b) => a.timestampInSeconds - b.timestampInSeconds)
 				.sort((a, b) => a.trackTitle.localeCompare(b.trackTitle))
 		}
+		if (soundmarks.length && sortBy === "most_played") {
+			soundmarks = soundmarks.sort((a, b) => b.timesPlayed - a.timesPlayed)
+		}
+		if (soundmarks.length && sortBy === "least_played") {
+			soundmarks = soundmarks.sort((a, b) => a.timesPlayed - b.timesPlayed)
+		}
+
 
 		const soundmarkListItems = []
 
@@ -138,7 +147,7 @@ const displaySoundmarkList = async () => {
 			soundmarkListItem.style.cursor = "pointer"
 			soundmarkListItem.classList.add("soundmarkListItem")
 			soundmarkListItem.addEventListener("click", () => {
-				playSoundmark(soundmark.trackLink, soundmark.timeStamp)
+				playSoundmark(soundmark.id, soundmark.trackLink, soundmark.timeStamp)
 			})
 
 			const soundmarkTrackTitle = document.createElement("div")
