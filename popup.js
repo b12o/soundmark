@@ -45,7 +45,8 @@ const storeSoundmark = async (response) => {
 			trackLink,
 			timeStamp,
 			createdAt,
-			timesPlayed: 1
+			timesPlayed: 1,
+			lastPlayed: Math.round(Date.now() / 1000)
 		})
 		chrome.storage.local.set({ soundmarks })
 	})
@@ -137,6 +138,9 @@ const displaySoundmarkList = async () => {
 		}
 		if (soundmarks.length && sortBy === "least_played") {
 			soundmarks = soundmarks.sort((a, b) => a.timesPlayed - b.timesPlayed)
+		}
+		if (soundmarks.length && sortBy === "recently_played") {
+			soundmarks = soundmarks.sort((a, b) => b.lastPlayed - a.lastPlayed)
 		}
 
 

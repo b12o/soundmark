@@ -10,6 +10,9 @@ chrome.storage.local.get(["soundmarks"]).then(async res => {
 			if (!soundmark["timesPlayed"]) {
 				soundmark["timesPlayed"] = 0
 			}
+			if (!soundmark["lastPlayed"]) {
+				soundmark["lastPlayed"] = 0
+			}
 		}
 		await chrome.storage.local.set({
 			soundmarks: res.soundmarks
@@ -97,6 +100,7 @@ chrome.runtime.onMessage.addListener(async (request) => {
 		let soundmarks = (await chrome.storage.local.get(["soundmarks"])).soundmarks
 		const soundmark = soundmarks.find(soundmark => soundmark.id === soundmarkId)
 		soundmark["timesPlayed"] += 1
+		soundmark["lastPlayed"] = Math.round(Date.now() / 1000)
 		await chrome.storage.local.set({
 			soundmarks: soundmarks
 		})

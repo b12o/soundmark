@@ -10,6 +10,7 @@ const validateSoundmarks = (soundmarksArray) => {
 			|| !item.timeStamp
 			|| !item.trackLink
 			|| isNaN(item.timesPlayed) 
+			|| isNaN(item.lastPlayed)
 			|| !item.trackTitle) {
 			return { result: false, message: "A required property does not exist.", soundmarks: undefined }
 		}
