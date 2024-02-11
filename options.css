@@ -11,8 +11,13 @@ body {
 }
 
 body {
-  background-color: #333;
+  background-color: #1c1c1c;
   color: white;
+}
+
+.separator {
+  margin-top: 2rem;
+  border-top: 1px solid #333;
 }
 
 .settings {
@@ -31,26 +36,20 @@ body {
 }
 
 .select-option {
-  background-color: #333;
+  background-color: #1c1c1c;
 }
 
 .btn {
   transition: all 0.3s;
-  border-radius: 8px;
+  border-radius: 4px;
   padding: 0.5rem 0;
   min-width: 8.8rem;
-  background-color: #999;
   cursor: pointer;
-}
-
-.btn:hover {
-  background-color: #555;
-  color: white;
 }
 
 .btn-clear-soundmarks {
   margin-top: 2rem;
-  border: 2px solid #d0342c;
+  border: 1px solid #d0342c;
   background-color: transparent;
   color: #d0342c;
 }
@@ -75,13 +74,13 @@ body {
 
 .btn-clear-soundmarks-confirmation {
   transition: all 0.3s;
-  border-radius: 5px;
+  border-radius: 4px;
   padding: 0.5rem 1rem;
   background-color: transparent;
 }
 
 .btn-confirm-yes {
-  border: 2px solid #d0342c;
+  border: 1px solid #d0342c;
   color: #d0342c;
 }
 
@@ -91,13 +90,13 @@ body {
 }
 
 .btn-confirm-no {
-  border: 2px solid #3eb489;
-  color: #3eb489;
+  border: 1px solid #ddd;
+  color: #ddd;
 }
 
 .btn-confirm-no:hover {
-  background-color: #3eb489;
-  color: white;
+  background-color: #ddd;
+  color: #1c1c1c;
 }
 
 .import-export button {
@@ -111,6 +110,19 @@ body {
   width: 18rem;
 }
 
+.btn-import,
+.btn-export {
+  border: 1px solid #ddd;
+  background-color: transparent;
+  color: #ddd;
+}
+
+.btn-import:hover,
+.btn-export:hover {
+  background-color: #ddd;
+  color: #1c1c1c;
+}
+
 .save-settings {
   margin-top: 0.5rem;
   margin-bottom: -1rem;
@@ -119,9 +131,13 @@ body {
 }
 
 .btn-save-settings {
+  border: 1px solid #dc4900;
+  background-color: transparent;
   width: 100%;
+  color: #dc4900;
 }
 
 .btn-save-settings:hover {
+  background-color: #dc4900;
   color: white;
 }

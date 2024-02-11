@@ -6,7 +6,7 @@
 }
 
 html {
-  background-color: #333;
+  background-color: #1c1c1c;
 }
 html,
 body {
@@ -26,10 +26,10 @@ h2 {
 #btn_select_file {
   cursor: pointer;
   background-color: transparent;
-  border: 2px solid #ff5500;
+  border: 1px solid #ff5500;
   color: #ff5500;
   font-size: 18px;
-  border-radius: 10px;
+  border-radius: 4px;
   width: 20rem;
   height: 3rem;
   margin-top: 2rem;
