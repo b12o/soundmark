@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "version": "1.1.0",
+  "version": "1.2.0",
   "name": "Soundmark for SoundCloud",
   "description": "Create and manage SoundCloud timestamps.",
   "permissions": ["tabs", "storage", "unlimitedStorage", "downloads", "scripting"],

@@ -2,7 +2,8 @@ const [addSoundmarkDiv] = document.getElementsByClassName("add-soundmark")
 const [marquee] = document.getElementsByClassName("marquee")
 const [songTrackMarquee] = document.getElementsByClassName("songtrack-marquee")
 const [soundcloudNotPlayingDiv] = document.getElementsByClassName("not-playing")
-const goToSoundcloudButton = document.getElementById("go_to_soundcloud")
+const goToSoundcloudButton = document.getElementById("btn_go_to_soundcloud")
+const goToSoundcloudText = document.getElementById("text_go_to_soundcloud")
 const addSoundmarkButton = document.getElementById("btn_add_soundmark")
 const addSoundmarkText = document.getElementById("text_add_soundmark")
 
@@ -210,6 +211,16 @@ goToSoundcloudButton.addEventListener("click", async () => {
 		target: "background.js"
 	})
 	window.close()
+})
+
+goToSoundcloudButton.addEventListener("mouseenter", () => {
+	goToSoundcloudButton.style.backgroundColor = "#dc4900";
+	goToSoundcloudText.style.color = "#ddd";
+})
+
+goToSoundcloudButton.addEventListener("mouseleave", () => {
+	goToSoundcloudButton.style.backgroundColor = "transparent";
+	goToSoundcloudText.style.color = "#dc4900";
 })
 
 addSoundmarkButton.addEventListener("mouseenter", () => {
