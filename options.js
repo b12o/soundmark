@@ -7,6 +7,7 @@ const confirmClearSoundmarks = document.getElementById("confirm_clear_soundmarks
 const importSoundmarksButton = document.getElementById("import_soundmarks")
 const exportSoundmarksButton = document.getElementById("export_soundmarks")
 const saveSettingsButton = document.getElementById("save_settings")
+const clearSoundmarksSeparator = document.getElementById("sep_clear_soundmarks")
 
 const numberOfSoundmarks = (await chrome.storage.local.get(["soundmarks"])).soundmarks.length
 const sorting = (await chrome.storage.local.get(["sortBy"])).sortBy
@@ -20,7 +21,10 @@ document.getElementById("sort_by").addEventListener("change", event => {
 	sortSelected = event.target.value
 })
 
-if (!numberOfSoundmarks) clearSoundmarksButton.style.display = "none"
+if (!numberOfSoundmarks) {
+	clearSoundmarksButton.style.display = "none"
+	clearSoundmarksSeparator.style.display = "none"
+}
 else {
 	clearSoundmarksButton.addEventListener("click", () => {
 		clearSoundmarksButton.style.display = "none"
