@@ -1,25 +1,38 @@
-import { STYLES } from "./injectedStyle.js"
-
-let STYLESHEET = undefined
-
-const [soundcloudTab] = await chrome.tabs.query({ url: "https://*.soundcloud.com/*", audible: true })
 const [addSoundmarkDiv] = document.getElementsByClassName("add-soundmark")
 const [marquee] = document.getElementsByClassName("marquee")
 const [songTrackMarquee] = document.getElementsByClassName("songtrack-marquee")
 const [soundcloudNotPlayingDiv] = document.getElementsByClassName("not-playing")
 const goToSoundcloudButton = document.getElementById("go_to_soundcloud")
 const addSoundmarkButton = document.getElementById("btn_add_soundmark")
+const addSoundmarkText = document.getElementById("text_add_soundmark")
 
-const SOUNDCLOUD_IS_PLAYING = (await chrome.tabs.query({
-	url: "https://*.soundcloud.com/*",
-	audible: true
-})).length > 0
+const initialize = async () => {
+	try {
+		const [soundcloudTab] = await chrome.tabs.query({ url: "https://*.soundcloud.com/*", audible: true })
+
+		if (soundcloudTab) {
+			await chrome.scripting.executeScript({
+				target: { tabId: soundcloudTab.id },
+				files: ["content.js"]
+			})
+
+			const res = await getTrackInfo()
+			document.getElementsByClassName("songtrack-marquee")[0].innerText = res.message.trackTitle
+
+			addSoundmarkDiv.style.display = "flex"
+			soundcloudNotPlayingDiv.style.display = "none"
+
+		} else {
+			addSoundmarkDiv.style.display = "none"
+			soundcloudNotPlayingDiv.style.display = "flex"
+		}
+	} catch (error) {
+		console.error("There was an error in initializing the extension: ", error)
+	}
+}
 
 const getTrackInfo = async () => {
-	const [soundcloudTab] = await chrome.tabs.query({
-		url: "https://*.soundcloud.com/*",
-		audible: true,
-	})
+	const [soundcloudTab] = await chrome.tabs.query({ url: "https://*.soundcloud.com/*", audible: true, })
 	if (soundcloudTab) {
 		const response = await chrome.tabs.sendMessage(
 			soundcloudTab.id,
@@ -85,8 +98,6 @@ const calculateMarqueeSpeed = (speed) => {
 	songTrackMarquee.style.animationDuration = timeTaken + "s"
 }
 
-calculateMarqueeSpeed(10)
-
 const getTimestampInSeconds = (timestampString) => {
 	let seconds = 0
 	let multiplier = 1
@@ -103,20 +114,6 @@ const displaySoundmarkList = async () => {
 
 		if (res.soundmarks.length === 0) {
 			document.getElementById("soundmarks_empty").style.display = "block"
-		}
-
-		if (res.soundmarks.length > 12) {
-			// check if injected stylesheet already exists in the DOM
-			if (!document.getElementById("STYLESHEET")) {
-				STYLESHEET = document.createElement("style")
-				STYLESHEET.id = "STYLESHEET"
-				STYLESHEET.innerText = STYLES
-				document.head.appendChild(STYLESHEET)
-			}
-		} else {
-			if (document.getElementById("STYLESHEET")) {
-				document.head.removeChild(STYLESHEET)
-			}
 		}
 
 		let soundmarks = res.soundmarks ?? []
@@ -191,28 +188,12 @@ const displaySoundmarkList = async () => {
 			soundmarkListItem.appendChild(buttonDeleteSoundmark)
 			soundmarkListItems.push(soundmarkListItem)
 		}
-		document.getElementById("soundmarks_list").replaceChildren(...soundmarkListItems)
+		document.getElementById("soundmark_list").replaceChildren(...soundmarkListItems)
 	})
 }
 
-if (SOUNDCLOUD_IS_PLAYING) {
-	const res = await getTrackInfo()
-	document.getElementsByClassName("songtrack-marquee")[0].innerText = res.message.trackTitle
-}
-
-if (soundcloudTab) {
-	addSoundmarkDiv.style.display = "flex"
-	soundcloudNotPlayingDiv.style.display = "none"
-}
-else {
-	addSoundmarkDiv.style.display = "none"
-	soundcloudNotPlayingDiv.style.display = "flex"
-}
-
 chrome.runtime.onMessage.addListener((request) => {
-	if (request.message === "refreshSoundmarks") {
-		window.location.reload()
-	}
+	if (request.message === "refreshSoundmarks") window.location.reload()
 })
 
 marquee.addEventListener("click", async () => {
@@ -231,6 +212,16 @@ goToSoundcloudButton.addEventListener("click", async () => {
 	window.close()
 })
 
+addSoundmarkButton.addEventListener("mouseenter", () => {
+	addSoundmarkButton.style.backgroundColor = "#dc4900";
+	addSoundmarkText.style.color = "#ddd";
+})
+
+addSoundmarkButton.addEventListener("mouseleave", () => {
+	addSoundmarkButton.style.backgroundColor = "transparent";
+	addSoundmarkText.style.color = "#dc4900";
+})
+
 addSoundmarkButton.addEventListener("click", async () => {
 	const trackInfo = await getTrackInfo()
 	if (trackInfo) {
@@ -241,4 +232,6 @@ addSoundmarkButton.addEventListener("click", async () => {
 	}
 })
 
+initialize()
+calculateMarqueeSpeed(10)
 displaySoundmarkList()
