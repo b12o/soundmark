@@ -1,3 +1,15 @@
+:root {
+  --bg-none: transparent;
+  --bg-orange: #dc4900;
+  --bg-darkgray: #1c1c1c;
+
+  --col-select-file: white;
+  --col-offwhite: #ddd;
+  --col-orange: #dc4900;
+
+  --bd-orange: 1px solid #dc4900;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -6,7 +18,7 @@
 }
 
 html {
-  background-color: #1c1c1c;
+  background-color: var(--bg-darkgray);
 }
 html,
 body {
@@ -15,7 +27,7 @@ body {
 
 h1,
 h2 {
-  color: #ddd;
+  color: var(--col-offwhite);
 }
 .container {
   margin: 10rem auto 0;
@@ -25,9 +37,9 @@ h2 {
 
 #btn_select_file {
   cursor: pointer;
-  background-color: transparent;
-  border: 1px solid #ff5500;
-  color: #ff5500;
+  background-color: var(--bg-none);
+  border: var(--bd-orange);
+  color: var(--col-orange);
   font-size: 18px;
   border-radius: 4px;
   width: 20rem;
@@ -36,8 +48,8 @@ h2 {
   transition: all 0.3s;
 }
 #btn_select_file:hover {
-  background-color: #ff5500;
-  color: white;
+  background-color: var(--bg-orange);
+  color: var(--col-select-file);
 }
 
 #import_success {

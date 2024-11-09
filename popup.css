@@ -1,17 +1,25 @@
 :root {
-	--bg-none: transparent;
-	--bg-orange: #dc4900;
-	--bg-lightgray:#282828;
-	--bg-darkgray: #1c1c1c;
-	--bg-black-semi: rgba(0,0,0,0.5);
-	--bg-marquee-mask: linear-gradient(to right, #1c1c1c 5%, transparent, #1c1c1c 98%);
+  --bg-none: transparent;
+  --bg-orange: #dc4900;
+  --bg-lightgray: #282828;
+  --bg-darkgray: #1c1c1c;
+  --bg-black-semi: rgba(0, 0, 0, 0.5);
+  --bg-marquee-mask: linear-gradient(
+    to right,
+    #1c1c1c 5%,
+    transparent,
+    #1c1c1c 98%
+  );
 
-	--col-marquee: white;
-	--col-offwhite: #ddd;
-	--col-orange: #dc4900;
+  --col-marquee: white;
+  --col-offwhite: #ddd;
+  --col-orange: #dc4900;
 
-	--bd-orange: 1px solid #dc4900;
-  	--bd-separator: 1px solid #333;
+  --bd-orange: 1px solid #dc4900;
+  --bd-separator: 1px solid #333;
+
+  --sh-btn-soundcloud-action: rgba(0, 0, 0, 0.16) 0px 3px 6px,
+    rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
 
 * {
@@ -35,7 +43,7 @@
   border-radius: 2rem;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--bg-orange)
+  background: var(--bg-orange);
 }
 
 li {
@@ -123,7 +131,7 @@ body {
   transition: all 0.3s;
   border: var(--bd-orange);
   border-radius: 4px;
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  box-shadow: var(--sh-btn-soundcloud-action);
   height: 2.5rem;
   padding: 0 0.75rem;
 }
@@ -153,7 +161,7 @@ body {
 }
 
 .separator {
-	border-top: var(--bd-separator);
+  border-top: var(--bd-separator);
 }
 
 .soundmarks-empty {
