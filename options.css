@@ -1,3 +1,21 @@
+:root {
+  --bg-none: transparent;
+  --bg-orange: #dc4900;
+  --bg-red: #d0342c;
+  --bg-darkgray: #1c1c1c;
+
+  --col-body: white;
+  --col-offwhite: #ddd;
+  --col-orange: #dc4900;
+  --col-red: #d0342c;
+  --col-darkgray: #1c1c1c;
+
+  --bd-offwhite: 1px solid #ddd;
+  --bd-orange: 1px solid #dc4900;
+  --bd-red: 1px solid #d0342c;
+  --bd-separator: 1px solid #333;
+}
+
 * {
   margin: 0;
   border: 0;
@@ -11,13 +29,13 @@ body {
 }
 
 body {
-  background-color: #1c1c1c;
-  color: white;
+  background-color: var(--bg-darkgray);
+  color: var(--col-body);
 }
 
 .separator {
   margin-top: 2rem;
-  border-top: 1px solid #333;
+  border-top: var(--bd-separator);
 }
 
 .settings {
@@ -31,12 +49,12 @@ body {
 
 .sort-select {
   margin-left: 0.5rem;
-  background: transparent;
-  color: white;
+  background: var(--bg-none);
+  color: var(--col-body);
 }
 
 .select-option {
-  background-color: #1c1c1c;
+  background-color: var(--bg-darkgray);
 }
 
 .btn {
@@ -49,14 +67,14 @@ body {
 
 .btn-clear-soundmarks {
   margin-top: 2rem;
-  border: 1px solid #d0342c;
+  border: var(--bd-red);
   background-color: transparent;
-  color: #d0342c;
+  color: var(--col-red);
 }
 
 .btn-clear-soundmarks:hover {
-  background-color: #d0342c;
-  color: white;
+  background-color: var(--col-red);
+  color: var(--col-body);
 }
 
 .clear-soundmarks-confirmation {
@@ -80,23 +98,23 @@ body {
 }
 
 .btn-confirm-yes {
-  border: 1px solid #d0342c;
-  color: #d0342c;
+  border: var(--bd-red);
+  color: var(--col-red);
 }
 
 .btn-confirm-yes:hover {
-  background-color: #d0342c;
-  color: white;
+  background-color: var(--bg-red);
+  color: var(--col-body);
 }
 
 .btn-confirm-no {
-  border: 1px solid #ddd;
-  color: #ddd;
+  border: var(--bd-offwhite);
+  color: var(--col-offwhite);
 }
 
 .btn-confirm-no:hover {
-  background-color: #ddd;
-  color: #1c1c1c;
+  background-color: var(--col-offwhite);
+  color: var(--col-darkgray);
 }
 
 .import-export button {
@@ -112,15 +130,15 @@ body {
 
 .btn-import,
 .btn-export {
-  border: 1px solid #ddd;
-  background-color: transparent;
-  color: #ddd;
+  border: var(--bd-offwhite);
+  background-color: var(--bg-none);
+  color: var(--col-offwhite);
 }
 
 .btn-import:hover,
 .btn-export:hover {
-  background-color: #ddd;
-  color: #1c1c1c;
+  background-color: var(--col-offwhite);
+  color: var(--col-darkgray);
 }
 
 .save-settings {
@@ -131,13 +149,13 @@ body {
 }
 
 .btn-save-settings {
-  border: 1px solid #dc4900;
-  background-color: transparent;
+  border: var(--bd-orange);
+  background-color: var(--bg-none);
   width: 100%;
-  color: #dc4900;
+  color: var(--col-orange);
 }
 
 .btn-save-settings:hover {
-  background-color: #dc4900;
-  color: white;
+  background-color: var(--col-orange);
+  color: var(--col-body);
 }
