@@ -5,7 +5,7 @@
   "description": "Create and manage SoundCloud timestamps.",
   "permissions": ["tabs", "storage", "unlimitedStorage", "downloads", "scripting"],
   "host_permissions": [
-	"*://*.soundcloud.com/*"
+  "*://*.soundcloud.com/*"
   ],
   "options_page": "options.html",
   "icons": {

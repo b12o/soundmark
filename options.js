@@ -13,63 +13,63 @@ const numberOfSoundmarks = (await chrome.storage.local.get(["soundmarks"])).soun
 const sorting = (await chrome.storage.local.get(["sortBy"])).sortBy
 
 for (const selectOption of document.getElementsByClassName("select-option")) {
-	if (selectOption.id.includes(sorting)) {
-		selectOption.setAttribute("selected", "")
-	}
+  if (selectOption.id.includes(sorting)) {
+    selectOption.setAttribute("selected", "")
+  }
 }
 document.getElementById("sort_by").addEventListener("change", event => {
-	sortSelected = event.target.value
+  sortSelected = event.target.value
 })
 
 if (!numberOfSoundmarks) {
-	clearSoundmarksButton.style.display = "none"
-	clearSoundmarksSeparator.style.display = "none"
+  clearSoundmarksButton.style.display = "none"
+  clearSoundmarksSeparator.style.display = "none"
 }
 else {
-	clearSoundmarksButton.addEventListener("click", () => {
-		clearSoundmarksButton.style.display = "none"
-		confirmClearSoundmarks.style.display = "flex"
-	})
+  clearSoundmarksButton.addEventListener("click", () => {
+    clearSoundmarksButton.style.display = "none"
+    confirmClearSoundmarks.style.display = "flex"
+  })
 }
 
 if (confirmClearSoundmarks) {
-	const [yesButton] = document.getElementsByClassName("btn-confirm-yes")
-	const [noButton] = document.getElementsByClassName("btn-confirm-no")
+  const [yesButton] = document.getElementsByClassName("btn-confirm-yes")
+  const [noButton] = document.getElementsByClassName("btn-confirm-no")
 
-	yesButton.addEventListener("click", async () => {
-		await chrome.storage.local.set({ "soundmarks": [] })
-		confirmClearSoundmarks.style.display = "none";
-		clearSoundmarksButton.style.display = "block"
-		window.location.reload()
-	})
+  yesButton.addEventListener("click", async () => {
+    await chrome.storage.local.set({ "soundmarks": [] })
+    confirmClearSoundmarks.style.display = "none";
+    clearSoundmarksButton.style.display = "block"
+    window.location.reload()
+  })
 
-	noButton.addEventListener("click", () => {
-		confirmClearSoundmarks.style.display = "none";
-		clearSoundmarksButton.style.display = "block"
-	})
+  noButton.addEventListener("click", () => {
+    confirmClearSoundmarks.style.display = "none";
+    clearSoundmarksButton.style.display = "block"
+  })
 }
 
 importSoundmarksButton.addEventListener("click", async () => {
-	// extension popup can not handle file imports. Use a dedicated page instead
-	await chrome.tabs.create({ url: "./upload/upload.html" })
+  // extension popup can not handle file imports. Use a dedicated page instead
+  await chrome.tabs.create({ url: "./upload/upload.html" })
 })
 
 exportSoundmarksButton.addEventListener("click", async () => {
-	let soundmarks = (await chrome.storage.local.get(["soundmarks"])).soundmarks
-	soundmarks.forEach(x => x.createdAt = new Date(x.createdAt * 1000).toLocaleString())
-	const soundmarksJson = JSON.stringify(soundmarks)
-	const blob = new Blob([soundmarksJson], {
-		type: "application/json"
-	})
-	chrome.downloads.download({
-		url: window.URL.createObjectURL(blob),
-		filename: "soundmarks.json"
-	})
+  let soundmarks = (await chrome.storage.local.get(["soundmarks"])).soundmarks
+  soundmarks.forEach(x => x.createdAt = new Date(x.createdAt * 1000).toLocaleString())
+  const soundmarksJson = JSON.stringify(soundmarks)
+  const blob = new Blob([soundmarksJson], {
+    type: "application/json"
+  })
+  chrome.downloads.download({
+    url: window.URL.createObjectURL(blob),
+    filename: "soundmarks.json"
+  })
 })
 
 saveSettingsButton.addEventListener("click", async () => {
-	if (sortSelected) {
-		await chrome.storage.local.set({ sortBy: sortSelected })
-	}
-	window.location.href = "./popup.html"
+  if (sortSelected) {
+    await chrome.storage.local.set({ sortBy: sortSelected })
+  }
+  window.location.href = "./popup.html"
 })
