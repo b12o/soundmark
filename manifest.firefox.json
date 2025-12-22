@@ -6,7 +6,7 @@
   "browser_specific_settings": {
     "gecko": {
       "id": "soundmark@edubio.dev",
-      "strict_min_version": "59.0"
+      "strict_min_version": "102.0"
     }
   },
   "permissions": [
@@ -14,7 +14,8 @@
     "tabs",
     "storage",
     "unlimitedStorage",
-    "downloads"
+    "downloads",
+    "scripting"
   ],
   "options_page": "options.html",
   "icons": {

@@ -15,17 +15,6 @@ const initialize = async () => {
     const [soundcloudTab] = await browserAPI.tabs.query({ url: "https://*.soundcloud.com/*", audible: true })
 
     if (soundcloudTab) {
-      if (typeof browser !== "undefined") {
-        await browserAPI.executeScript({
-          target: { tabId: soundcloudTab.id },
-          files: ["content.js"]
-        })
-      } else {
-        await browserAPI.scripting.executeScript({
-          target: { tabId: soundcloudTab.id },
-          files: ["content.js"]
-        })
-      }
       await browserAPI.scripting.executeScript({
         target: { tabId: soundcloudTab.id },
         files: ["content.js"]
