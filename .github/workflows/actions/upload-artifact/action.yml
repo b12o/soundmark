@@ -1,0 +1,33 @@
+name: upload artifact
+description: upload zipped archives for a specific browser type
+inputs:
+  browser-type:
+    description: the type of browser this artifact will be for
+    required: true
+    default: chrome
+
+runs:
+  using: composite
+  steps:
+    - name: extract version from manifest file
+      id: get_version
+      run: |
+        VERSION=$(jq -r '.version' manifest.${{ inputs.browser-type }}.json)
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "version: $VERSION"
+
+    - name: prepare manifest.json
+      run: |
+        cp -f manifest.${{ inputs.browser-type }}.json manifest.json
+
+    - name: upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: soundmark-v${{ steps.get_version.outputs.version }}-${{ inputs.browser-type }}
+        path: |
+          **/*
+          !.*git*
+          !*.md
+          !manifest.*.json
+          !*.zip
+        retention-days: 14

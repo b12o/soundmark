@@ -1,0 +1,13 @@
+name: "Check versions"
+description: "Check if manifest.chrome.json and manifest.firefox.json are using the same extension version"
+runs:
+  using: composite
+  steps:
+    - name: check versions
+      run: |
+        CHROME_VERSION=$(jq -r '.version' manifest.chrome.json)
+        FIREFOX_VERSION=$(jq -r '.version' manifest.firefox.json)
+        if [ "$CHROME_VERSION" != "$FIREFOX_VERSION" ]; then
+          echo "ERROR: version mismatch. Chrome: $CHROME_VERSION, Firefox: $FIREFOX_VERSION"
+          exit 1
+        fi
