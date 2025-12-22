@@ -31,6 +31,7 @@ body {
 body {
   background-color: var(--bg-darkgray);
   color: var(--col-body);
+  font-family: "Segoe UI", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .separator {

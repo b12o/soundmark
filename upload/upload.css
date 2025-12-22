@@ -20,6 +20,9 @@
 html {
   background-color: var(--bg-darkgray);
 }
+body {
+  font-family: "Segoe UI", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
 html,
 body {
   width: 100%;

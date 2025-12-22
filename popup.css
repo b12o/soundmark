@@ -59,6 +59,7 @@ body {
   margin: 0 auto;
   width: 28rem;
   background-color: var(--bg-darkgray);
+  font-family: "Segoe UI", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .play-status {
