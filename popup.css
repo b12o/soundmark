@@ -59,7 +59,7 @@ body {
   margin: 0 auto;
   width: 28rem;
   background-color: var(--bg-darkgray);
-  font-family: "Segoe UI", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .play-status {
@@ -115,7 +115,7 @@ body {
   animation: marquee linear infinite;
   padding-left: 100%;
   text-indent: 0;
-  font-size: 14px;
+  font-size: 18px;
   font-weight: bold;
 }
 
@@ -152,12 +152,11 @@ body {
   position: relative;
   margin-right: 0.5rem;
   font-weight: bold;
-  color: var(--col-offwhite);
 }
 
 .not-playing-info {
   margin-top: 0.2rem;
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 400;
 }
 
@@ -199,13 +198,14 @@ body {
 
 .soundmarkListItemText {
   min-width: 16.5rem;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 400;
 }
 
 .soundmarkTrackTimestamp {
-  width: 4rem;
+  width: 6rem;
   text-align: right;
+  font-size: 16px;
 }
 
 button {
