@@ -58,7 +58,7 @@ jobs:
           path: soundmark-v${{ steps.release.outputs.version }}.zip
           retention-days: 90
           # already zipped
-          compression_level: 0
+          compression-level: 0
 
       - name: create pre-release
         if: github.event_name == 'workflow_dispatch'
