@@ -48,7 +48,7 @@ jobs:
             !*.md
             !manifest.*.json
             !*.zip
-          retention-days: 90
+          retention-days: 14
 
       - name: prepare manifest.json for chrome
         run: |
@@ -64,4 +64,4 @@ jobs:
             !*.md
             !manifest.*.json
             !*.zip
-          retention-days: 90
+          retention-days: 14
