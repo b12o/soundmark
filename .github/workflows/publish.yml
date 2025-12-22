@@ -14,7 +14,7 @@ on:
       release_notes:
         description: "release notes (optional)"
         type: string
-        required: falsae
+        required: false
 
 permissions:
   contents: write
