@@ -63,7 +63,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          VERSION="${{ stepts.release.outputs.version }}"
+          VERSION="${{ steps.release.outputs.version }}"
           NOTES="${{ github.event.inputs.release_notes }}"
           # use default notes if none provided
           if [ -z "$NOTES" ]; then
