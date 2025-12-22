@@ -1,3 +1,5 @@
+import browserAPI from "../browser-api"
+
 const validateSoundmarks = (soundmarksArray) => {
   let counter = 0
   if (!(soundmarksArray instanceof Array)) {
@@ -49,7 +51,7 @@ const tryImport = async (parsedFile) => {
   if (parsedFile) {
     const { result, message, soundmarks } = validateSoundmarks(parsedFile)
     if (result) {
-      await chrome.storage.local.set({ soundmarks })
+      await browserAPI.storage.local.set({ soundmarks })
       document.getElementById("upload_title").innerText = "Successfully imported soundmarks file!"
       document.getElementById("import_success").style.display = "block"
       document.getElementById("btn_select_file").style.display = "none"

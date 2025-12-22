@@ -1,3 +1,6 @@
+import browserAPI from "./browserAPI-api"
+
+
 const [addSoundmarkDiv] = document.getElementsByClassName("add-soundmark")
 const [marquee] = document.getElementsByClassName("marquee")
 const [songTrackMarquee] = document.getElementsByClassName("songtrack-marquee")
@@ -9,10 +12,10 @@ const addSoundmarkText = document.getElementById("text_add_soundmark")
 
 const initialize = async () => {
   try {
-    const [soundcloudTab] = await chrome.tabs.query({ url: "https://*.soundcloud.com/*", audible: true })
+    const [soundcloudTab] = await browserAPI.tabs.query({ url: "https://*.soundcloud.com/*", audible: true })
 
     if (soundcloudTab) {
-      await chrome.scripting.executeScript({
+      await browserAPI.scripting.executeScript({
         target: { tabId: soundcloudTab.id },
         files: ["content.js"]
       })
@@ -33,9 +36,9 @@ const initialize = async () => {
 }
 
 const getTrackInfo = async () => {
-  const [soundcloudTab] = await chrome.tabs.query({ url: "https://*.soundcloud.com/*", audible: true, })
+  const [soundcloudTab] = await browserAPI.tabs.query({ url: "https://*.soundcloud.com/*", audible: true, })
   if (soundcloudTab) {
-    const response = await chrome.tabs.sendMessage(
+    const response = await browserAPI.tabs.sendMessage(
       soundcloudTab.id,
       {
         message: "getTrackInfo",
@@ -51,7 +54,7 @@ const getTrackInfo = async () => {
 
 const storeSoundmark = async (response) => {
   const { id, trackTitle, trackLink, timeStamp, createdAt } = response.message
-  chrome.storage.local.get(["soundmarks"]).then((res) => {
+  browserAPI.storage.local.get(["soundmarks"]).then((res) => {
     const soundmarks = res.soundmarks || []
     soundmarks.push({
       id,
@@ -62,12 +65,12 @@ const storeSoundmark = async (response) => {
       timesPlayed: 1,
       lastPlayed: Math.round(Date.now() / 1000)
     })
-    chrome.storage.local.set({ soundmarks })
+    browserAPI.storage.local.set({ soundmarks })
   })
 }
 
 const playSoundmark = async (id, trackLink, timeStamp) => {
-  await chrome.runtime.sendMessage({
+  await browserAPI.runtime.sendMessage({
     message: "playSoundmark",
     id,
     trackLink,
@@ -78,7 +81,7 @@ const playSoundmark = async (id, trackLink, timeStamp) => {
 }
 
 const deleteSoundmark = async (id) => {
-  chrome.runtime.sendMessage({
+  browserAPI.runtime.sendMessage({
     message: "deleteSoundmark",
     id,
     target: "background.js"
@@ -110,8 +113,8 @@ const getTimestampInSeconds = (timestampString) => {
 }
 
 const displaySoundmarkList = async () => {
-  const sortBy = (await chrome.storage.local.get(["sortBy"])).sortBy
-  chrome.storage.local.get(["soundmarks"]).then(async res => {
+  const sortBy = (await browserAPI.storage.local.get(["sortBy"])).sortBy
+  browserAPI.storage.local.get(["soundmarks"]).then(async res => {
 
     if (res.soundmarks.length === 0) {
       document.getElementById("soundmarks_empty").style.display = "block"
@@ -193,12 +196,12 @@ const displaySoundmarkList = async () => {
   })
 }
 
-chrome.runtime.onMessage.addListener((request) => {
+browserAPI.runtime.onMessage.addListener((request) => {
   if (request.message === "refreshSoundmarks") window.location.reload()
 })
 
 marquee.addEventListener("click", async () => {
-  await chrome.runtime.sendMessage({
+  await browserAPI.runtime.sendMessage({
     message: "openSoundcloud",
     target: "background.js"
   })
@@ -206,7 +209,7 @@ marquee.addEventListener("click", async () => {
 })
 
 goToSoundcloudButton.addEventListener("click", async () => {
-  await chrome.runtime.sendMessage({
+  await browserAPI.runtime.sendMessage({
     message: "openSoundcloud",
     target: "background.js"
   })
