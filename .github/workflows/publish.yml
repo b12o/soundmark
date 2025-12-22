@@ -36,7 +36,7 @@ jobs:
       - name: determine release version
         id: release
         run: |
-          if [ -n "${{ github.event.inputs.version }}"]; then
+          if [ -n "${{ github.event.inputs.version }}" ]; then
             VERSION="${{ github.event.inputs.version }}"
             echo "using override version: $VERSION"
           else
@@ -48,7 +48,7 @@ jobs:
       - name: create zip
         run: |
           zip -r soundmark-v${{ steps.release.outputs.version }}.zip . \
-            -x '*.git' '.github/*' 'LICENSE.md' '.gitignore'
+            -x '*.git*' 'LICENSE.md' 'README.md'
           echo "created soundmark-v${{ steps.release.outputs.version }}.zip"
 
       - name: upload artifact
