@@ -1,4 +1,4 @@
-import browserAPI from "./browser-api"
+const browserAPI = typeof browser !== "undefined" ? browser : chrome
 
 browserAPI.runtime.onMessage.addListener(
   (request, _, sendResponse) => {

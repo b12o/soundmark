@@ -1,4 +1,4 @@
-import browserAPI from "../browser-api"
+const browserAPI = typeof browser !== "undefined" ? browser : chrome
 
 const validateSoundmarks = (soundmarksArray) => {
   let counter = 0

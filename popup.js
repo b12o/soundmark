@@ -1,4 +1,4 @@
-import browserAPI from "./browserAPI-api"
+const browserAPI = typeof browser !== "undefined" ? browser : chrome
 
 
 const [addSoundmarkDiv] = document.getElementsByClassName("add-soundmark")

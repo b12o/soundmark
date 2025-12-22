@@ -4,17 +4,9 @@ on:
   push:
     branches:
       - develop
+      - main
 
   workflow_dispatch:
-    inputs:
-      version:
-        description: "override version (optional, will use version from manifest.json otherwise)"
-        type: string
-        required: false
-      release_notes:
-        description: "release notes (optional)"
-        type: string
-        required: false
 
 permissions:
   contents: write
@@ -26,58 +18,50 @@ jobs:
       - name: checkout
         uses: actions/checkout@v4
 
-      - name: extract version from manifest.json
-        id: manifest
+      - name: check versions
         run: |
-          VERSION=$(jq -r '.version' manifest.json)
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "version in manifest.json: $VERSION"
-
-      - name: determine release version
-        id: release
-        run: |
-          if [ -n "${{ github.event.inputs.version }}" ]; then
-            VERSION="${{ github.event.inputs.version }}"
-            echo "using override version: $VERSION"
-          else
-            VERSION="${{ steps.manifest.outputs.version }}"
-            echo "using manifest version: $VERSION"
+          CHROME_VERSION=$(jq -r '.version' manifest.chrome.json)
+          FIREFOX_VERSION=$(jq -r '.version' manifest.firefox.json)
+          if [ "$CHROME_VERSION" != "$FIREFOX_VERSION" ]; then
+            echo "ERROR: version mismatch. Chrome: $CHROME_VERSION, Firefox: $FIREFOX_VERSION"
+            exit 1
           fi
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-      - name: create zip
+      - name: extract version from manifest.chrome.json
+        id: get_version
         run: |
-          zip -r soundmark-v${{ steps.release.outputs.version }}.zip . \
-            -x '*.git*' 'LICENSE.md' 'README.md'
-          echo "created soundmark-v${{ steps.release.outputs.version }}.zip"
+          VERSION=$(jq -r '.version' manifest.chrome.json)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "version: $VERSION"
 
-      - name: upload artifact
+      - name: prepare manifest.json for firefox
+        run: |
+          cp -f manifest.firefox.json manifest.json
+
+      - name: upload artifact (firefox)
         uses: actions/upload-artifact@v4
         with:
-          name: soundmark-v${{ steps.release.outputs.version }}
+          name: soundmark-v${{ steps.get_version.outputs.version }}-firefox
           path: |
             **/*
             !.*git*
             !*.md
+            !manifest.*.json
             !*.zip
           retention-days: 90
 
-      - name: create pre-release
-        if: github.event_name == 'workflow_dispatch'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: prepare manifest.json for chrome
         run: |
-          VERSION="${{ steps.release.outputs.version }}"
-          NOTES="${{ github.event.inputs.release_notes }}"
-          # use default notes if none provided
-          if [ -z "$NOTES" ]; then
-            NOTES="Release v$VERSION"
-          fi
+          cp -f manifest.chrome.json manifest.json
 
-          gh release create "v$VERSION" \
-            --title "Soundmark v$VERSION" \
-            --notes "$NOTES" \
-            --prerelease
-            soundmark-v$VERSION.zip
-
-          echo "created pre-release version: v$VERSION"
+      - name: upload artifact (chrome)
+        uses: actions/upload-artifact@v4
+        with:
+          name: soundmark-v${{ steps.get_version.outputs.version }}-chrome
+          path: |
+            **/*
+            !.*git*
+            !*.md
+            !manifest.*.json
+            !*.zip
+          retention-days: 90

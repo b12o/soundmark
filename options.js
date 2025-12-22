@@ -1,4 +1,4 @@
-import browserAPI from "./browserAPI.api"
+const browserAPI = typeof browser !== "undefined" ? browser : chrome
 
 document.getElementById("confirm_clear_soundmarks").style.display = "none"
 

@@ -1,5 +1,4 @@
-import browserAPI from "./browserAPI.api"
-
+const browserAPI = typeof browser !== "undefined" ? browser : chrome
 
 browserAPI.storage.local.get(["soundmarks"]).then(async res => {
   if (!res.soundmarks) {

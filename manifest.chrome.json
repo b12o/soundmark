@@ -3,12 +3,6 @@
   "version": "1.4.0",
   "name": "Soundmark for SoundCloud",
   "description": "Create and manage SoundCloud timestamps.",
-  "browser_specific_settings": {
-    "gecko": {
-      "id": "soundmark@edubio.dev",
-      "strict_min_version": "109.0"
-    }
-  },
   "permissions": [
     "tabs",
     "storage",
