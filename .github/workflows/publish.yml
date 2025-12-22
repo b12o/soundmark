@@ -15,50 +15,18 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/check-versions
-      - uses: ./.github/actions/upload-artifact
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: check versions
+        uses: ./.github/actions/check-versions
+
+      - name: upload chrome version
+        uses: ./.github/actions/upload-artifact
         with:
           browser-type: chrome
-      - uses: ./.github/actions/upload-artifact
+
+      - name: upload firefox version
+        uses: ./.github/actions/upload-artifact
         with:
           browser-type: firefox
-
-      # - name: extract version from manifest.chrome.json
-      # id: get_version
-      # run: |
-      # VERSION=$(jq -r '.version' manifest.chrome.json)
-      # echo "version=$VERSION" >> $GITHUB_OUTPUT
-      # echo "version: $VERSION"
-
-      # - name: prepare manifest.json for firefox
-      # run: |
-      # cp -f manifest.firefox.json manifest.json
-
-      # - name: upload artifact (firefox)
-      # uses: actions/upload-artifact@v4
-      # with:
-      # name: soundmark-v${{ steps.get_version.outputs.version }}-firefox
-      # path: |
-      # **/*
-      # !.*git*
-      # !*.md
-      # !manifest.*.json
-      # !*.zip
-      # retention-days: 14
-
-      # - name: prepare manifest.json for chrome
-      # run: |
-      # cp -f manifest.chrome.json manifest.json
-
-      # - name: upload artifact (chrome)
-      # uses: actions/upload-artifact@v4
-      # with:
-      # name: soundmark-v${{ steps.get_version.outputs.version }}-chrome
-      # path: |
-      # **/*
-      # !.*git*
-      # !*.md
-      # !manifest.*.json
-      # !*.zip
-      # retention-days: 14
