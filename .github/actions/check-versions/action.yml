@@ -11,3 +11,4 @@ runs:
           echo "ERROR: version mismatch. Chrome: $CHROME_VERSION, Firefox: $FIREFOX_VERSION"
           exit 1
         fi
+      shell: bash

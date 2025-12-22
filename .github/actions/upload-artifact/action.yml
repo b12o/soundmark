@@ -15,6 +15,7 @@ runs:
         VERSION=$(jq -r '.version' manifest.${{ inputs.browser-type }}.json)
         echo "version=$VERSION" >> $GITHUB_OUTPUT
         echo "version: $VERSION"
+      shell: bash
 
     - name: prepare manifest.json
       run: |
