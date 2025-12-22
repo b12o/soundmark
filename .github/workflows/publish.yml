@@ -55,10 +55,12 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: soundmark-v${{ steps.release.outputs.version }}
-          path: soundmark-v${{ steps.release.outputs.version }}.zip
+          path: |
+            **/*
+            !.*git*
+            !*.md
+            !*.zip
           retention-days: 90
-          # already zipped
-          compression-level: 0
 
       - name: create pre-release
         if: github.event_name == 'workflow_dispatch'
