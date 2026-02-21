@@ -1,60 +1,64 @@
-const browserAPI = typeof browser !== "undefined" ? browser : chrome
+const browserAPI = typeof browser !== "undefined" ? browser : chrome;
 
-const [addSoundmarkDiv] = document.getElementsByClassName("add-soundmark")
-const [marquee] = document.getElementsByClassName("marquee")
-const [songTrackMarquee] = document.getElementsByClassName("songtrack-marquee")
-const [soundcloudNotPlayingDiv] = document.getElementsByClassName("not-playing")
-const goToSoundcloudButton = document.getElementById("btn_go_to_soundcloud")
-const goToSoundcloudText = document.getElementById("text_go_to_soundcloud")
-const addSoundmarkButton = document.getElementById("btn_add_soundmark")
-const addSoundmarkText = document.getElementById("text_add_soundmark")
+const [addSoundmarkDiv] = document.getElementsByClassName("add-soundmark");
+const [marquee] = document.getElementsByClassName("marquee");
+const [songTrackMarquee] = document.getElementsByClassName("songtrack-marquee");
+const [soundcloudNotPlayingDiv] =
+  document.getElementsByClassName("not-playing");
+const goToSoundcloudButton = document.getElementById("btn_go_to_soundcloud");
+const goToSoundcloudText = document.getElementById("text_go_to_soundcloud");
+const addSoundmarkButton = document.getElementById("btn_add_soundmark");
+const addSoundmarkText = document.getElementById("text_add_soundmark");
 
 const initialize = async () => {
   try {
-    const [soundcloudTab] = await browserAPI.tabs.query({ url: "https://*.soundcloud.com/*", audible: true })
+    const [soundcloudTab] = await browserAPI.tabs.query({
+      url: "https://*.soundcloud.com/*",
+      audible: true,
+    });
 
     if (soundcloudTab) {
       await browserAPI.scripting.executeScript({
         target: { tabId: soundcloudTab.id },
-        files: ["content.js"]
-      })
+        files: ["content.js"],
+      });
 
-      const res = await getTrackInfo()
-      document.getElementsByClassName("songtrack-marquee")[0].innerText = res.message.trackTitle
+      const res = await getTrackInfo();
+      document.getElementsByClassName("songtrack-marquee")[0].innerText =
+        res.message.trackTitle;
 
-      addSoundmarkDiv.style.display = "flex"
-      soundcloudNotPlayingDiv.style.display = "none"
-
+      addSoundmarkDiv.style.display = "flex";
+      soundcloudNotPlayingDiv.style.display = "none";
     } else {
-      addSoundmarkDiv.style.display = "none"
-      soundcloudNotPlayingDiv.style.display = "flex"
+      addSoundmarkDiv.style.display = "none";
+      soundcloudNotPlayingDiv.style.display = "flex";
     }
   } catch (error) {
-    console.error("There was an error in initializing the extension: ", error)
+    console.error("There was an error in initializing the extension: ", error);
   }
-}
+};
 
 const getTrackInfo = async () => {
-  const [soundcloudTab] = await browserAPI.tabs.query({ url: "https://*.soundcloud.com/*", audible: true, })
+  const [soundcloudTab] = await browserAPI.tabs.query({
+    url: "https://*.soundcloud.com/*",
+    audible: true,
+  });
   if (soundcloudTab) {
-    const response = await browserAPI.tabs.sendMessage(
-      soundcloudTab.id,
-      {
-        message: "getTrackInfo",
-        target: "content.js"
-      }
-    )
-    return response
+    const response = await browserAPI.tabs.sendMessage(soundcloudTab.id, {
+      message: "getTrackInfo",
+      target: "content.js",
+    });
+    return response;
   } else {
-    addSoundmarkDiv.style.display = "none"
-    soundcloudNotPlayingDiv.style.display = "flex"
+    addSoundmarkDiv.style.display = "none";
+    soundcloudNotPlayingDiv.style.display = "flex";
   }
-}
+};
 
 const storeSoundmark = async (response) => {
-  const { id, trackTitle, trackLink, timeStamp, createdAt } = response.message
+  const { id, trackTitle, trackLink, timeStamp, createdAt } = response.message;
   browserAPI.storage.local.get(["soundmarks"]).then((res) => {
-    const soundmarks = res.soundmarks || []
+    const soundmarks = res.soundmarks || [];
     soundmarks.push({
       id,
       trackTitle,
@@ -62,11 +66,11 @@ const storeSoundmark = async (response) => {
       timeStamp,
       createdAt,
       timesPlayed: 1,
-      lastPlayed: Math.round(Date.now() / 1000)
-    })
-    browserAPI.storage.local.set({ soundmarks })
-  })
-}
+      lastPlayed: Math.round(Date.now() / 1000),
+    });
+    browserAPI.storage.local.set({ soundmarks });
+  });
+};
 
 const playSoundmark = async (id, trackLink, timeStamp) => {
   await browserAPI.runtime.sendMessage({
@@ -74,177 +78,186 @@ const playSoundmark = async (id, trackLink, timeStamp) => {
     id,
     trackLink,
     timeStamp,
-    target: "background.js"
-  })
-  window.close()
-}
+    target: "background.js",
+  });
+  window.close();
+};
 
 const deleteSoundmark = async (id) => {
   browserAPI.runtime.sendMessage({
     message: "deleteSoundmark",
     id,
-    target: "background.js"
-  })
-}
+    target: "background.js",
+  });
+};
 
 const truncateTitle = (trackTitle, limit) => {
   if (trackTitle.length > limit) {
-    return trackTitle.substr(0, limit - 2) + "..."
-  }
-  else return trackTitle
-}
+    return trackTitle.substr(0, limit - 2) + "...";
+  } else return trackTitle;
+};
 
 const calculateMarqueeSpeed = (speed) => {
   // time = distance / speed
   let songTrackMarqueeLength = songTrackMarquee.offsetWidth;
   let timeTaken = songTrackMarqueeLength / speed;
-  songTrackMarquee.style.animationDuration = timeTaken + "s"
-}
+  songTrackMarquee.style.animationDuration = timeTaken + "s";
+};
 
 const getTimestampInSeconds = (timestampString) => {
-  let seconds = 0
-  let multiplier = 1
-  for (let num of timestampString.split(':').reverse()) {
-    seconds += parseInt(num) * multiplier
-    multiplier *= 60
+  let seconds = 0;
+  let multiplier = 1;
+  for (let num of timestampString.split(":").reverse()) {
+    seconds += parseInt(num) * multiplier;
+    multiplier *= 60;
   }
-  return seconds
-}
+  return seconds;
+};
 
 const displaySoundmarkList = async () => {
-  const sortBy = (await browserAPI.storage.local.get(["sortBy"])).sortBy
-  browserAPI.storage.local.get(["soundmarks"]).then(async res => {
-
+  const sortBy = (await browserAPI.storage.local.get(["sortBy"])).sortBy;
+  browserAPI.storage.local.get(["soundmarks"]).then(async (res) => {
     if (res.soundmarks.length === 0) {
-      document.getElementById("soundmarks_empty").style.display = "block"
+      document.getElementById("soundmarks_empty").style.display = "block";
     }
 
-    let soundmarks = res.soundmarks ?? []
+    let soundmarks = res.soundmarks ?? [];
     if (soundmarks.length && sortBy === "newest") {
-      soundmarks = soundmarks.sort((a, b) => b.createdAt - a.createdAt)
+      soundmarks = soundmarks.sort((a, b) => b.createdAt - a.createdAt);
     }
     if (soundmarks.length && sortBy === "oldest") {
-      soundmarks = soundmarks.sort((a, b) => a.createdAt - b.createdAt)
+      soundmarks = soundmarks.sort((a, b) => a.createdAt - b.createdAt);
     }
     if (soundmarks.length && sortBy === "track_title") {
       // first sort all soundmarks by timestamp location, then sort by track title
-      soundmarks.forEach(x => x.timestampInSeconds = getTimestampInSeconds(x.timeStamp))
+      soundmarks.forEach(
+        (x) => (x.timestampInSeconds = getTimestampInSeconds(x.timeStamp)),
+      );
       soundmarks = soundmarks
         .sort((a, b) => a.timestampInSeconds - b.timestampInSeconds)
-        .sort((a, b) => a.trackTitle.localeCompare(b.trackTitle))
+        .sort((a, b) => a.trackTitle.localeCompare(b.trackTitle));
     }
     if (soundmarks.length && sortBy === "most_played") {
-      soundmarks = soundmarks.sort((a, b) => b.timesPlayed - a.timesPlayed)
+      soundmarks = soundmarks.sort((a, b) => b.timesPlayed - a.timesPlayed);
     }
     if (soundmarks.length && sortBy === "least_played") {
-      soundmarks = soundmarks.sort((a, b) => a.timesPlayed - b.timesPlayed)
+      soundmarks = soundmarks.sort((a, b) => a.timesPlayed - b.timesPlayed);
     }
     if (soundmarks.length && sortBy === "recently_played") {
-      soundmarks = soundmarks.sort((a, b) => b.lastPlayed - a.lastPlayed)
+      soundmarks = soundmarks.sort((a, b) => b.lastPlayed - a.lastPlayed);
     }
 
-
-    const soundmarkListItems = []
+    const soundmarkListItems = [];
 
     for (const soundmark of soundmarks) {
-      const soundmarkListItem = document.createElement("li")
-      soundmarkListItem.style.cursor = "pointer"
-      soundmarkListItem.classList.add("soundmarkListItem")
+      const soundmarkListItem = document.createElement("li");
+
+      soundmarkListItem.style.cursor = "pointer";
+      soundmarkListItem.classList.add("soundmark-list-item");
       soundmarkListItem.addEventListener("click", () => {
-        playSoundmark(soundmark.id, soundmark.trackLink, soundmark.timeStamp)
-      })
+        playSoundmark(soundmark.id, soundmark.trackLink, soundmark.timeStamp);
+      });
 
-      const soundmarkTrackTitle = document.createElement("div")
-      soundmarkTrackTitle.classList.add("soundmarkListItemText")
-      soundmarkTrackTitle.innerHTML = `${truncateTitle(soundmark.trackTitle, 60)}`
-      soundmarkTrackTitle.style.display = "inline"
+      const soundmarkTrackTitle = document.createElement("div");
+      soundmarkTrackTitle.classList.add("soundmark-list-item-text");
+      soundmarkTrackTitle.innerHTML = `${truncateTitle(soundmark.trackTitle, 40)}`;
+      soundmarkTrackTitle.style.display = "inline";
 
-      const soundmarkTrackTimestamp = document.createElement("div")
-      soundmarkTrackTimestamp.classList.add("soundmarkTrackTimestamp")
-      soundmarkTrackTimestamp.innerHTML = `@ ${soundmark.timeStamp}`
-      soundmarkTrackTimestamp.style.display = "inline"
+      const soundmarkAtSymbol = document.createElement("div");
+      soundmarkAtSymbol.innerHTML = "@";
+      soundmarkAtSymbol.classList.add("soundmark-list-item-at-symbol");
+      soundmarkAtSymbol.style.display = "inline";
 
-      const buttonDeleteSoundmark = document.createElement("button")
-      buttonDeleteSoundmark.classList.add("btn-delete-soundmark")
-      const deleteIcon = document.createElement("img")
-      deleteIcon.src = "assets/delete-icon.svg"
-      deleteIcon.height = "14"
-      deleteIcon.width = "14"
-      deleteIcon.style.background = "transparent"
-      buttonDeleteSoundmark.appendChild(deleteIcon)
-      buttonDeleteSoundmark.addEventListener("click", e => {
-        e.stopPropagation()
-        deleteSoundmark(soundmark.id)
-      })
-      buttonDeleteSoundmark.style.display = "none"
+      const soundmarkTrackTimestamp = document.createElement("div");
+      soundmarkTrackTimestamp.classList.add("soundmark-track-timestamp");
+      soundmarkTrackTimestamp.innerHTML = `${soundmark.timeStamp}`;
+      soundmarkTrackTimestamp.style.display = "inline";
+
+      const buttonDeleteSoundmark = document.createElement("button");
+      buttonDeleteSoundmark.classList.add("btn-delete-soundmark");
+      const deleteIcon = document.createElement("img");
+      deleteIcon.src = "assets/delete-icon.svg";
+      deleteIcon.height = "14";
+      deleteIcon.width = "14";
+      deleteIcon.style.background = "transparent";
+      buttonDeleteSoundmark.appendChild(deleteIcon);
+      buttonDeleteSoundmark.addEventListener("click", (e) => {
+        e.stopPropagation();
+        deleteSoundmark(soundmark.id);
+      });
+      buttonDeleteSoundmark.style.display = "none";
       soundmarkListItem.addEventListener("mouseenter", () => {
-        soundmarkTrackTitle.innerHTML = `${truncateTitle(soundmark.trackTitle, 45)}`
-        buttonDeleteSoundmark.style.display = "inline"
-      })
+        soundmarkTrackTitle.innerHTML = `${truncateTitle(soundmark.trackTitle, 35)}`;
+        buttonDeleteSoundmark.style.display = "inline";
+      });
       soundmarkListItem.addEventListener("mouseleave", () => {
-        soundmarkTrackTitle.innerHTML = `${truncateTitle(soundmark.trackTitle, 60)}`
-        buttonDeleteSoundmark.style.display = "none"
-      })
+        soundmarkTrackTitle.innerHTML = `${truncateTitle(soundmark.trackTitle, 40)}`;
+        buttonDeleteSoundmark.style.display = "none";
+      });
 
-      soundmarkListItem.appendChild(soundmarkTrackTitle)
-      soundmarkListItem.appendChild(soundmarkTrackTimestamp)
-      soundmarkListItem.appendChild(buttonDeleteSoundmark)
-      soundmarkListItems.push(soundmarkListItem)
+      soundmarkListItem.appendChild(soundmarkTrackTitle);
+      soundmarkListItem.appendChild(soundmarkAtSymbol);
+      soundmarkListItem.appendChild(soundmarkTrackTimestamp);
+      soundmarkListItem.appendChild(buttonDeleteSoundmark);
+      soundmarkListItems.push(soundmarkListItem);
     }
-    document.getElementById("soundmark_list").replaceChildren(...soundmarkListItems)
-  })
-}
+    document
+      .getElementById("soundmark_list")
+      .replaceChildren(...soundmarkListItems);
+  });
+};
 
 browserAPI.runtime.onMessage.addListener((request) => {
-  if (request.message === "refreshSoundmarks") window.location.reload()
-})
+  if (request.message === "refreshSoundmarks") window.location.reload();
+});
 
 marquee.addEventListener("click", async () => {
   await browserAPI.runtime.sendMessage({
     message: "openSoundcloud",
-    target: "background.js"
-  })
-  window.close()
-})
+    target: "background.js",
+  });
+  window.close();
+});
 
 goToSoundcloudButton.addEventListener("click", async () => {
   await browserAPI.runtime.sendMessage({
     message: "openSoundcloud",
-    target: "background.js"
-  })
-  window.close()
-})
+    target: "background.js",
+  });
+  window.close();
+});
 
 goToSoundcloudButton.addEventListener("mouseenter", () => {
   goToSoundcloudButton.style.backgroundColor = "#dc4900";
   goToSoundcloudText.style.color = "#ddd";
-})
+});
 
 goToSoundcloudButton.addEventListener("mouseleave", () => {
   goToSoundcloudButton.style.backgroundColor = "transparent";
   goToSoundcloudText.style.color = "#dc4900";
-})
+});
 
 addSoundmarkButton.addEventListener("mouseenter", () => {
   addSoundmarkButton.style.backgroundColor = "#dc4900";
   addSoundmarkText.style.color = "#ddd";
-})
+});
 
 addSoundmarkButton.addEventListener("mouseleave", () => {
   addSoundmarkButton.style.backgroundColor = "transparent";
   addSoundmarkText.style.color = "#dc4900";
-})
+});
 
 addSoundmarkButton.addEventListener("click", async () => {
-  const trackInfo = await getTrackInfo()
+  const trackInfo = await getTrackInfo();
   if (trackInfo) {
-    const now = Math.round(Date.now() / 1000)
-    trackInfo.message.id = Math.random().toString(16).substring(2)
-    trackInfo.message.createdAt = now
-    await storeSoundmark(trackInfo)
+    const now = Math.round(Date.now() / 1000);
+    trackInfo.message.id = Math.random().toString(16).substring(2);
+    trackInfo.message.createdAt = now;
+    await storeSoundmark(trackInfo);
   }
-})
+});
 
-initialize()
-calculateMarqueeSpeed(10)
-displaySoundmarkList()
+initialize();
+calculateMarqueeSpeed(10);
+displaySoundmarkList();
+

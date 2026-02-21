@@ -1,39 +1,42 @@
+<!doctype html>
 <html>
   <head>
     <script src="./popup.js" type="module" defer></script>
     <link rel="stylesheet" href="popup.css" />
   </head>
   <body>
-    <div class="play-status add-soundmark">
-      <div class="now-playing">
-        <p class="now-playing-text">Now playing:</p>
-        <div class="marquee">
-          <div class="marquee-mask"></div>
-          <span class="songtrack-marquee"></span>
+    <div class="main-container">
+      <div class="play-status add-soundmark">
+        <div class="now-playing">
+          <p class="now-playing-text">Now playing:</p>
+          <div class="marquee">
+            <div class="marquee-mask"></div>
+            <span class="songtrack-marquee"></span>
+          </div>
         </div>
+        <button class="btn-soundcloud-action" id="btn_add_soundmark">
+          <p id="text_add_soundmark">Add Soundmark</p>
+        </button>
+        <a href="./options.html" id="settings_link">
+          <img src="./assets/settings-icon.svg" width="32" height="32" alt="" />
+        </a>
       </div>
-      <button class="btn-soundcloud-action" id="btn_add_soundmark">
-        <p id="text_add_soundmark">Add Soundmark</p>
-      </button>
-      <a href="./options.html" id="settings_link">
-        <img src="./assets/settings-icon.svg" width="32" height="32" alt="" />
-      </a>
-    </div>
-    <div class="play-status not-playing">
-      <p class="not-playing-info">Soundcloud is not playing right now.</p>
-      <button id="btn_go_to_soundcloud" class="btn-soundcloud-action">
-        <p id="text_go_to_soundcloud">Go to Soundcloud</p>
-      </button>
-      <a href="./options.html" id="settings_link">
-        <img src="./assets/settings-icon.svg" width="30" height="30" alt="" />
-      </a>
-    </div>
-    <hr class="separator" />
-    <div id="soundmarks_empty" class="soundmarks-empty">
-      <p>You do not have any soundmarks.</p>
-    </div>
-    <div class="soundmark-list">
-      <ul id="soundmark_list"></ul>
+      <div class="play-status not-playing">
+        <p class="not-playing-info">Soundcloud isn't playing right now.</p>
+        <button id="btn_go_to_soundcloud" class="btn-soundcloud-action">
+          <p id="text_go_to_soundcloud">Go to Soundcloud</p>
+        </button>
+        <a href="./options.html" id="settings_link">
+          <img src="./assets/settings-icon.svg" width="30" height="30" alt="" />
+        </a>
+      </div>
+      <hr class="separator" />
+      <div id="soundmarks_empty" class="soundmarks-empty">
+        <p>You do not have any soundmarks.</p>
+      </div>
+      <div class="soundmark-list">
+        <ul id="soundmark_list"></ul>
+      </div>
     </div>
   </body>
 </html>
