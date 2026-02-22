@@ -10,8 +10,8 @@
   --bg-orange: #dc4900;
   --bg-lightgray: #282828;
   --bg-darkgray: #1c1c1c;
-  --bg-neutral-800: #191919;
-  --bg-neutral-900: #202020;
+  --bg-darkgray-2: #191919;
+  --bg-darkgray-3: #202020;
   --bg-black-semi: rgba(0, 0, 0, 0.5);
   --bg-marquee-mask: linear-gradient(
     to right,
@@ -62,15 +62,6 @@ li {
 button {
   background: var(--bg-none);
   cursor: pointer;
-}
-
-img {
-  transition: transform 0.5s ease;
-  transform-origin: center;
-}
-
-img:hover {
-  transform: rotate(90deg);
 }
 
 body {
@@ -141,10 +132,10 @@ body {
 }
 
 @keyframes marquee {
-  0% {
+  from {
     transform: translateX(5%);
   }
-  100% {
+  to {
     transform: translateX(-100%);
   }
 }
@@ -170,10 +161,23 @@ body {
   right: 0.8rem;
 }
 
+#text_add_soundmark {
+  margin-top: 4px;
+}
+
 #settings_link {
   position: relative;
   margin-right: 0.5rem;
   font-weight: bold;
+}
+
+img {
+  transition: transform 0.5s ease;
+  transform-origin: center;
+}
+
+img:hover {
+  transform: rotate(90deg);
 }
 
 .not-playing-info {
@@ -199,14 +203,6 @@ body {
   overflow-y: scroll;
 }
 
-.soundmark-list li:nth-child(even) {
-  background-color: var(--bg-neutral-800);
-}
-
-.soundmark-list li:nth-child(odd) {
-  background-color: var(--bg-neutral-900);
-}
-
 .soundmark-list-item {
   display: flex;
   flex-flow: row nowrap;
@@ -217,15 +213,21 @@ body {
   padding: 12px 16px;
   color: var(--col-offwhite);
 }
+.soundmark-list-item:nth-child(even) {
+  background-color: var(--bg-darkgray-2);
+}
+
+.soundmark-list-item:nth-child(odd) {
+  background-color: var(--bg-darkgray-3);
+}
 
 .soundmark-list-item:hover {
   background-color: var(--bg-lightgray);
 }
 
 .soundmark-list-item-text {
-  /* border: 1px solid red; */
   width: 500px;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 400;
 }
 
@@ -237,4 +239,8 @@ body {
   width: 6rem;
   text-align: right;
   font-size: 16px;
+}
+
+.btn-delete-soundmark {
+  margin-left: 16px;
 }
