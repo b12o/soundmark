@@ -1,3 +1,5 @@
+import { SOUNDCLOUD_URL, truncateTitle } from "./util.js";
+
 const browserAPI = typeof browser !== "undefined" ? browser : chrome;
 
 const [addSoundmarkDiv] = document.getElementsByClassName("add-soundmark");
@@ -10,10 +12,10 @@ const goToSoundcloudText = document.getElementById("text_go_to_soundcloud");
 const addSoundmarkButton = document.getElementById("btn_add_soundmark");
 const addSoundmarkText = document.getElementById("text_add_soundmark");
 
-const initialize = async () => {
+async function initialize() {
   try {
     const [soundcloudTab] = await browserAPI.tabs.query({
-      url: "https://*.soundcloud.com/*",
+      url: SOUNDCLOUD_URL,
       audible: true,
     });
 
@@ -36,11 +38,11 @@ const initialize = async () => {
   } catch (error) {
     console.error("There was an error in initializing the extension: ", error);
   }
-};
+}
 
-const getTrackInfo = async () => {
+async function getTrackInfo() {
   const [soundcloudTab] = await browserAPI.tabs.query({
-    url: "https://*.soundcloud.com/*",
+    url: SOUNDCLOUD_URL,
     audible: true,
   });
   if (soundcloudTab) {
@@ -53,26 +55,25 @@ const getTrackInfo = async () => {
     addSoundmarkDiv.style.display = "none";
     soundcloudNotPlayingDiv.style.display = "flex";
   }
-};
+}
 
-const storeSoundmark = async (response) => {
+async function storeSoundmark(response) {
   const { id, trackTitle, trackLink, timeStamp, createdAt } = response.message;
-  browserAPI.storage.local.get(["soundmarks"]).then((res) => {
-    const soundmarks = res.soundmarks || [];
-    soundmarks.push({
-      id,
-      trackTitle,
-      trackLink,
-      timeStamp,
-      createdAt,
-      timesPlayed: 1,
-      lastPlayed: Math.round(Date.now() / 1000),
-    });
-    browserAPI.storage.local.set({ soundmarks });
+  const res = await browserAPI.storage.local.get(["soundmarks"]);
+  const soundmarks = res.soundmarks || [];
+  soundmarks.push({
+    id,
+    trackTitle,
+    trackLink,
+    timeStamp,
+    createdAt,
+    timesPlayed: 1,
+    lastPlayed: Math.round(Date.now() / 1000),
   });
-};
+  browserAPI.storage.local.set({ soundmarks });
+}
 
-const playSoundmark = async (id, trackLink, timeStamp) => {
+async function playSoundmark(id, trackLink, timeStamp) {
   await browserAPI.runtime.sendMessage({
     message: "playSoundmark",
     id,
@@ -81,21 +82,15 @@ const playSoundmark = async (id, trackLink, timeStamp) => {
     target: "background.js",
   });
   window.close();
-};
+}
 
-const deleteSoundmark = async (id) => {
-  browserAPI.runtime.sendMessage({
+async function deleteSoundmark(id) {
+  await browserAPI.runtime.sendMessage({
     message: "deleteSoundmark",
     id,
     target: "background.js",
   });
-};
-
-const truncateTitle = (trackTitle, limit) => {
-  if (trackTitle.length > limit) {
-    return trackTitle.substr(0, limit - 2) + "...";
-  } else return trackTitle;
-};
+}
 
 const calculateMarqueeSpeed = (speed) => {
   // time = distance / speed
@@ -160,7 +155,7 @@ const displaySoundmarkList = async () => {
 
       const soundmarkTrackTitle = document.createElement("div");
       soundmarkTrackTitle.classList.add("soundmark-list-item-text");
-      soundmarkTrackTitle.innerHTML = `${truncateTitle(soundmark.trackTitle, 40)}`;
+      soundmarkTrackTitle.innerHTML = `${truncateTitle(soundmark.trackTitle, 45)}`;
       soundmarkTrackTitle.style.display = "inline";
 
       const soundmarkAtSymbol = document.createElement("div");
@@ -188,10 +183,10 @@ const displaySoundmarkList = async () => {
       buttonDeleteSoundmark.style.display = "none";
       soundmarkListItem.addEventListener("mouseenter", () => {
         soundmarkTrackTitle.innerHTML = `${truncateTitle(soundmark.trackTitle, 35)}`;
-        buttonDeleteSoundmark.style.display = "inline";
+        buttonDeleteSoundmark.style.display = "block";
       });
       soundmarkListItem.addEventListener("mouseleave", () => {
-        soundmarkTrackTitle.innerHTML = `${truncateTitle(soundmark.trackTitle, 40)}`;
+        soundmarkTrackTitle.innerHTML = `${truncateTitle(soundmark.trackTitle, 45)}`;
         buttonDeleteSoundmark.style.display = "none";
       });
 
@@ -260,4 +255,3 @@ addSoundmarkButton.addEventListener("click", async () => {
 initialize();
 calculateMarqueeSpeed(10);
 displaySoundmarkList();
-
