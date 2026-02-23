@@ -78,6 +78,7 @@ async function storeSoundmark(response) {
     lastPlayed: Math.round(Date.now() / 1000),
   });
   browserAPI.storage.local.set({ soundmarks });
+  window.location.reload();
 }
 
 async function playSoundmark(id, trackLink, timeStamp) {

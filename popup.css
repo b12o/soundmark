@@ -38,8 +38,13 @@
   padding: 0;
 }
 
+html,
+body {
+  scrollbar-width: none;
+}
+
 ::-webkit-scrollbar {
-  width: 0;
+  width: 6px;
   z-index: -10;
 }
 
