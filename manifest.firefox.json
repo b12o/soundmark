@@ -8,9 +8,7 @@
       "id": "soundmark@edubio.dev",
       "strict_min_version": "142.0",
       "data_collection_permissions": {
-        "required": [
-          "none"
-        ]
+        "required": ["none"]
       }
     }
   },
@@ -33,8 +31,6 @@
     "default_icon": "assets/icon_48.png"
   },
   "background": {
-    "scripts": [
-      "background.js"
-    ]
+    "page": "background.html"
   }
 }
