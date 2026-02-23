@@ -34,6 +34,7 @@ document.getElementById("sort_by").addEventListener("change", (event) => {
 if (!numberOfSoundmarks) {
   clearSoundmarksButton.style.display = "none";
   clearSoundmarksSeparator.style.display = "none";
+  exportSoundmarksButton.style.display = "none";
 } else {
   clearSoundmarksButton.addEventListener("click", () => {
     clearSoundmarksButton.style.display = "none";
@@ -87,4 +88,3 @@ saveSettingsButton.addEventListener("click", async () => {
 });
 
 reviewLink.href = REVIEW_URL;
-
