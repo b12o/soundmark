@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "version": "1.4.0",
+  "version": "1.5.0",
   "name": "Soundmark for SoundCloud",
   "description": "Create and manage SoundCloud timestamps.",
   "permissions": [
@@ -10,9 +10,7 @@
     "downloads",
     "scripting"
   ],
-  "host_permissions": [
-    "*://*.soundcloud.com/*"
-  ],
+  "host_permissions": ["*://*.soundcloud.com/*"],
   "options_page": "options.html",
   "icons": {
     "16": "assets/icon_16.png",
@@ -24,6 +22,8 @@
     "default_icon": "assets/icon_48.png"
   },
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.js",
+    "type": "module"
   }
 }
+
