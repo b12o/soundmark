@@ -1,6 +1,7 @@
 const browserAPI = typeof browser !== "undefined" ? browser : chrome;
 
 export const SOUNDCLOUD_URL = "https://*.soundcloud.com/*";
+export const IS_CHROME = browserAPI === chrome;
 
 export function truncateTitle(trackTitle, limit) {
   if (trackTitle.length > limit) {

@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <script src="./options.js" type="module" defer></script>
     <link rel="stylesheet" href="options.css" />
   </head>
   <body>
-    <div class="settings">
+    <div class="main-container">
       <div class="sort-by-container">
         <label class="sort-by-label" for="sort_by">Sort Soundmarks by</label>
         <select class="sort-select" name="sort_by" id="sort_by">
@@ -46,7 +46,7 @@
         </select>
       </div>
 
-      <hr class="separator" id="sep_clear_soundmarks"/>
+      <hr class="separator" id="sep_clear_soundmarks" />
       <button class="btn btn-clear-soundmarks" id="clear_soundmarks">
         Clear Soundmarks
       </button>
@@ -59,7 +59,7 @@
           No
         </button>
       </div>
-      <hr class="separator" id="sep_import_export"/>
+      <hr class="separator" id="sep_import_export" />
       <div class="import-export">
         <button class="btn btn-import" id="import_soundmarks">
           Import from file
@@ -72,6 +72,10 @@
         <button id="save_settings" class="btn btn-save-settings">
           Save settings
         </button>
+      </div>
+      <hr class="separator" id="sep_leave_review" />
+      <div>
+        <p>If you like this extension, please leave a review!</p>
       </div>
     </div>
   </body>

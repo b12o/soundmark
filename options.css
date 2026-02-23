@@ -1,3 +1,10 @@
+@font-face {
+  font-family: "Overpass Mono";
+  src: url("./assets/fonts/OverpassMono-Regular_1.ttf") format("truetype");
+  font-weight: "normal";
+  font-style: "normal";
+}
+
 :root {
   --bg-none: transparent;
   --bg-orange: #dc4900;
@@ -23,15 +30,16 @@
   padding: 0;
 }
 
-html,
-body {
-  width: 20rem;
-}
-
 body {
   background-color: var(--bg-darkgray);
   color: var(--col-body);
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Overpass Mono", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.main-container {
+  width: 450px;
+  height: 400px;
+  margin: 32px 16px 0;
 }
 
 .separator {
@@ -39,19 +47,18 @@ body {
   border-top: var(--bd-separator);
 }
 
-.settings {
-  margin: 2rem auto;
-  width: 18rem;
-}
-
 .sort-by-label {
-  font-size: 16px;
+  font-size: 20px;
 }
 
 .sort-select {
+  cursor: pointer;
+  border: 1px solid #ddd;
   margin-left: 0.5rem;
   background: var(--bg-none);
   color: var(--col-body);
+  font-family: "Overpass Mono", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 20px;
 }
 
 .select-option {
@@ -61,9 +68,11 @@ body {
 .btn {
   transition: all 0.3s;
   border-radius: 4px;
-  padding: 0.5rem 0;
-  min-width: 8.8rem;
+  padding: 8px 16px;
+  min-width: 210px;
   cursor: pointer;
+  font-family: "Overpass Mono", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 18px;
 }
 
 .btn-clear-soundmarks {
@@ -126,7 +135,6 @@ body {
   display: flex;
   justify-content: space-between;
   margin-top: 2rem;
-  width: 18rem;
 }
 
 .btn-import,
@@ -143,10 +151,9 @@ body {
 }
 
 .save-settings {
-  margin-top: 0.5rem;
+  margin-top: 24px;
   margin-bottom: -1rem;
-  width: 18rem;
-  height: 2rem;
+  height: 32px;
 }
 
 .btn-save-settings {
