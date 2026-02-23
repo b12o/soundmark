@@ -1,3 +1,10 @@
+@font-face {
+  font-family: "Overpass Mono";
+  src: url("../assets/fonts/OverpassMono-Regular_1.ttf") format("truetype");
+  font-weight: "normal";
+  font-style: "normal";
+}
+
 :root {
   --bg-none: transparent;
   --bg-orange: #dc4900;
@@ -20,9 +27,6 @@
 html {
   background-color: var(--bg-darkgray);
 }
-body {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-}
 html,
 body {
   width: 100%;
@@ -31,7 +35,13 @@ body {
 h1,
 h2 {
   color: var(--col-offwhite);
+  font-family: "Overpass Mono", Tahoma, Geneva, Verdana, sans-serif;
 }
+
+button {
+  font-family: "Overpass Mono", Tahoma, Geneva, Verdana, sans-serif;
+}
+
 .container {
   margin: 10rem auto 0;
   width: 30rem;
