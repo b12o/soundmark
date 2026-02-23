@@ -52,14 +52,12 @@
       </button>
       <div class="clear-soundmarks-confirmation" id="confirm_clear_soundmarks">
         <p>Are you sure?</p>
-        <button class="btn-clear-soundmarks-confirmation btn-confirm-yes">
-          Yes
-        </button>
-        <button class="btn-clear-soundmarks-confirmation btn-confirm-no">
-          No
-        </button>
+        <button class="btn btn-confirm-yes">Yes</button>
+        <button class="btn btn-confirm-no">No</button>
       </div>
+
       <hr class="separator" id="sep_import_export" />
+
       <div class="import-export">
         <button class="btn btn-import" id="import_soundmarks">
           Import from file
@@ -68,14 +66,25 @@
           Export to file
         </button>
       </div>
+
       <div class="save-settings">
         <button id="save_settings" class="btn btn-save-settings">
           Save settings
         </button>
       </div>
-      <hr class="separator" id="sep_leave_review" />
-      <div>
-        <p>If you like this extension, please leave a review!</p>
+
+      <hr class="separator" id="sep_disclaimer" />
+
+      <div class="disclaimer">
+        <p>Soundmark for Soundcloud does not store or share your data.</p>
+        <p>All your soundmarks are stored and processed on your device.</p>
+      </div>
+
+      <div class="review">
+        <p class="text-review">
+          Like this extension?
+          <a id="review_link" href="" target="_blank">Leave a review!</a>
+        </p>
       </div>
     </div>
   </body>

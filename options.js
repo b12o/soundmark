@@ -1,77 +1,90 @@
-const browserAPI = typeof browser !== "undefined" ? browser : chrome
+import { REVIEW_URL } from "./util.js";
 
-document.getElementById("confirm_clear_soundmarks").style.display = "none"
+const browserAPI = typeof browser !== "undefined" ? browser : chrome;
 
-let sortSelected
+document.getElementById("confirm_clear_soundmarks").style.display = "none";
 
-const clearSoundmarksButton = document.getElementById("clear_soundmarks")
-const confirmClearSoundmarks = document.getElementById("confirm_clear_soundmarks")
-const importSoundmarksButton = document.getElementById("import_soundmarks")
-const exportSoundmarksButton = document.getElementById("export_soundmarks")
-const saveSettingsButton = document.getElementById("save_settings")
-const clearSoundmarksSeparator = document.getElementById("sep_clear_soundmarks")
+let sortSelected;
 
-const numberOfSoundmarks = (await browserAPI.storage.local.get(["soundmarks"])).soundmarks.length
-const sorting = (await browserAPI.storage.local.get(["sortBy"])).sortBy
+const clearSoundmarksButton = document.getElementById("clear_soundmarks");
+const confirmClearSoundmarks = document.getElementById(
+  "confirm_clear_soundmarks",
+);
+const importSoundmarksButton = document.getElementById("import_soundmarks");
+const exportSoundmarksButton = document.getElementById("export_soundmarks");
+const saveSettingsButton = document.getElementById("save_settings");
+const clearSoundmarksSeparator = document.getElementById(
+  "sep_clear_soundmarks",
+);
+const reviewLink = document.getElementById("review_link");
+
+const numberOfSoundmarks = (await browserAPI.storage.local.get(["soundmarks"]))
+  .soundmarks.length;
+const sorting = (await browserAPI.storage.local.get(["sortBy"])).sortBy;
 
 for (const selectOption of document.getElementsByClassName("select-option")) {
   if (selectOption.id.includes(sorting)) {
-    selectOption.setAttribute("selected", "")
+    selectOption.setAttribute("selected", "");
   }
 }
-document.getElementById("sort_by").addEventListener("change", event => {
-  sortSelected = event.target.value
-})
+document.getElementById("sort_by").addEventListener("change", (event) => {
+  sortSelected = event.target.value;
+});
 
 if (!numberOfSoundmarks) {
-  clearSoundmarksButton.style.display = "none"
-  clearSoundmarksSeparator.style.display = "none"
-}
-else {
+  clearSoundmarksButton.style.display = "none";
+  clearSoundmarksSeparator.style.display = "none";
+} else {
   clearSoundmarksButton.addEventListener("click", () => {
-    clearSoundmarksButton.style.display = "none"
-    confirmClearSoundmarks.style.display = "flex"
-  })
+    clearSoundmarksButton.style.display = "none";
+    confirmClearSoundmarks.style.display = "flex";
+  });
 }
 
 if (confirmClearSoundmarks) {
-  const [yesButton] = document.getElementsByClassName("btn-confirm-yes")
-  const [noButton] = document.getElementsByClassName("btn-confirm-no")
+  const [yesButton] = document.getElementsByClassName("btn-confirm-yes");
+  const [noButton] = document.getElementsByClassName("btn-confirm-no");
 
   yesButton.addEventListener("click", async () => {
-    await browserAPI.storage.local.set({ "soundmarks": [] })
+    await browserAPI.storage.local.set({ soundmarks: [] });
     confirmClearSoundmarks.style.display = "none";
-    clearSoundmarksButton.style.display = "block"
-    window.location.reload()
-  })
+    clearSoundmarksButton.style.display = "block";
+    window.location.reload();
+  });
 
   noButton.addEventListener("click", () => {
     confirmClearSoundmarks.style.display = "none";
-    clearSoundmarksButton.style.display = "block"
-  })
+    clearSoundmarksButton.style.display = "block";
+  });
 }
 
 importSoundmarksButton.addEventListener("click", async () => {
   // extension popup can not handle file imports. Use a dedicated page instead
-  await browserAPI.tabs.create({ url: "./upload/upload.html" })
-})
+  await browserAPI.tabs.create({ url: "./upload/upload.html" });
+});
 
 exportSoundmarksButton.addEventListener("click", async () => {
-  let soundmarks = (await browserAPI.storage.local.get(["soundmarks"])).soundmarks
-  soundmarks.forEach(x => x.createdAt = new Date(x.createdAt * 1000).toLocaleString())
-  const soundmarksJson = JSON.stringify(soundmarks)
+  let soundmarks = (await browserAPI.storage.local.get(["soundmarks"]))
+    .soundmarks;
+  soundmarks.forEach(
+    (x) => (x.createdAt = new Date(x.createdAt * 1000).toLocaleString()),
+  );
+  const soundmarksJson = JSON.stringify(soundmarks);
   const blob = new Blob([soundmarksJson], {
-    type: "application/json"
-  })
+    type: "application/json",
+  });
   browserAPI.downloads.download({
     url: window.URL.createObjectURL(blob),
-    filename: "soundmarks.json"
-  })
-})
+    filename: "soundmarks.json",
+  });
+});
 
 saveSettingsButton.addEventListener("click", async () => {
   if (sortSelected) {
-    await browserAPI.storage.local.set({ sortBy: sortSelected })
+    await browserAPI.storage.local.set({ sortBy: sortSelected });
   }
-  window.location.href = "./popup.html"
-})
+  window.location.href = "./popup.html";
+});
+
+reviewLink.href = REVIEW_URL;
+

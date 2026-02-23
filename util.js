@@ -3,6 +3,12 @@ const browserAPI = typeof browser !== "undefined" ? browser : chrome;
 export const SOUNDCLOUD_URL = "https://*.soundcloud.com/*";
 export const IS_CHROME = browserAPI === chrome;
 
+export const REVIEW_URL = IS_CHROME
+  ? "https://chromewebstore.google.com/detail/soundmark-for-soundcloud/\
+mehaefgchoneblgknhbijmemjmdkhdoh/reviews"
+  : "https://addons.mozilla.org/en-US/firefox/addon/soundmark/reviews/\
+?utm_content=search&utm_medium=referral&utm_source=addons.mozilla.org";
+
 export function truncateTitle(trackTitle, limit) {
   if (trackTitle.length > limit) {
     return trackTitle.substr(0, limit - 2) + "...";
