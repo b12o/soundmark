@@ -1,6 +1,6 @@
 const heroImg = document.getElementById("hero-img");
 
-// Add a sleek hover interaction to the hero image
+// Add a sleek hover interaction to the hero image.
 if (heroImg) {
   heroImg.addEventListener("mouseenter", () => {
     heroImg.style.transform = "scale(1.03) translateY(-5px)";
@@ -12,4 +12,3 @@ if (heroImg) {
     heroImg.style.boxShadow = "";
   });
 }
-
